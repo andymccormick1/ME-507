@@ -34,8 +34,8 @@ int32_t COUNT_2 = 0;
 int16_t duty_cycle_1 = 2500;
 int16_t duty_cycle_2 = -5000;
 
-int32_t SP1 = 1000;
-int32_t SP2 = 1000;
+int32_t SP1 = 100;
+int32_t SP2 = 100;
 
 int16_t KP = 0;
 
