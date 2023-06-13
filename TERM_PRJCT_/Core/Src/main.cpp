@@ -31,15 +31,15 @@ char char_buffer;
 char buffer [100] = {0};
 int32_t COUNT_1 = 0;
 int32_t COUNT_2 = 0;
-int16_t duty_cycle_1 = 2500;
+int16_t duty_cycle_1 = 5000;
 int16_t duty_cycle_2 = -5000;
+int16_t duty_cycle_flywheel = 5000;
 
-int32_t SP1 = 100;
-int32_t SP2 = 100;
+int32_t SP1 = 1000;
+int32_t SP2 = 1000;
 
 int16_t KP = 0;
-
-
+int16_t ANGLE = 0;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -53,9 +53,13 @@ int16_t KP = 0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+
+I2C_HandleTypeDef hi2c1;
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim5;
 
 UART_HandleTypeDef huart1;
 
@@ -70,6 +74,9 @@ static void MX_TIM2_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_TIM1_Init(void);
+static void MX_TIM5_Init(void);
+static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -111,53 +118,167 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
+  MX_TIM1_Init();
+  MX_TIM5_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart1, (uint8_t*) &char_buffer, 1);	// Initialize UART Receive
-      encoder_reader ENCD1 = encoder_reader(&htim3);
-      encoder_reader ENCD2 = encoder_reader(&htim4);
-      motor_driver MOTOR_1 = motor_driver(&htim2, TIM_CHANNEL_1, TIM_CHANNEL_2);		// Initialize the motor driver object as MOTOR_1
-      motor_driver MOTOR_2 = motor_driver(&htim2, TIM_CHANNEL_3, TIM_CHANNEL_4);		// Initialize the motor driver object as MOTOR_2
-      feedback_controller controller_1 = feedback_controller();
-      feedback_controller controller_2 = feedback_controller();
+           encoder_reader ENCD1 = encoder_reader(&htim3);
+           encoder_reader ENCD2 = encoder_reader(&htim4);
+           motor_driver MOTOR_1 = motor_driver(&htim2, TIM_CHANNEL_1, TIM_CHANNEL_2);		// Initialize the motor driver object as MOTOR_1
+           motor_driver MOTOR_2 = motor_driver(&htim2, TIM_CHANNEL_3, TIM_CHANNEL_4);		// Initialize the motor driver object as MOTOR_2
+           feedback_controller controller_1 = feedback_controller();
+           feedback_controller controller_2 = feedback_controller();
+           motor_driver FLYWHEEL = motor_driver(&htim1, TIM_CHANNEL_1, TIM_CHANNEL_2);
 
-      controller_1.set_KP(KP);
-      controller_2.set_KP(KP);
+           controller_1.set_KP(KP);
+           controller_2.set_KP(KP);
 
-      controller_1.set_setpoint(SP1);
-      controller_2.set_setpoint(SP2);
+           controller_1.set_setpoint(SP1);
+           controller_2.set_setpoint(SP2);
+
+           servo_driver SERVO1 = servo_driver(&htim5,TIM_CHANNEL_1);
+
+// I2C Testing:
+
+#define imuaddr             0x28<<1
+#define oprmode_addr        0x3D
+#define heading_addr        0x1E
+#define heading_addr_msb    0x1F
+#define calib_addr          0x35
+#define pwrmode_addr        0x3E
+#define unit_select_addr    0x3B
+
+    uint8_t config_mode = 0x00;
+    uint8_t imu_mode = 0b00001000;
+    uint8_t cur_opmode[1] = {0};
+
+    uint8_t calib_state[1] = {0};
+
+    uint8_t cur_pwrmode[1] = {0};
+
+    uint8_t unit_sel = 0b00010001;
+
+	uint8_t raw_heading[2] = {0};
+	uint8_t raw_heading1[2] = {0};
+	uint8_t raw_heading2[2] = {0};
+	uint8_t raw_heading3[2] = {0};
+	uint16_t heading, heading1, heading2, heading3;
+	uint8_t heading_deg;
+	uint8_t raw_headinglsb[1], raw_headingmsb[1];
+
+    uint32_t test = HAL_I2C_IsDeviceReady(&hi2c1, imuaddr, 1, HAL_MAX_DELAY);
+
+    uint32_t a = sprintf(buffer, "Device Ready: %ld \r\n", test);
+    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, a, 1000);
+
+    HAL_I2C_Mem_Write(&hi2c1, imuaddr, oprmode_addr, 1, &imu_mode, 1, HAL_MAX_DELAY);
+    HAL_Delay(10);
+    HAL_I2C_Mem_Read(&hi2c1, imuaddr, oprmode_addr, 1, cur_opmode, 1, HAL_MAX_DELAY);
+    HAL_Delay(10);
+//    HAL_I2C_Mem_Write(&hi2c1, imuaddr, unit_select_addr, 1, unit_sel, 1, HAL_MAX_DELAY);
+
+    HAL_I2C_Mem_Read(&hi2c1, imuaddr, pwrmode_addr, 1, cur_pwrmode, 1, HAL_MAX_DELAY);
+    uint32_t pwrmode = sprintf(buffer, "Cur Power: %ld\r\n", cur_pwrmode[0]);
+    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, pwrmode, 1000);
+
+    uint32_t op1mode = sprintf(buffer, "Cur Op Mode: %ld\r\n", cur_opmode[0]);
+    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, op1mode, 1000);
+
+
+
+    HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading, 2, HAL_MAX_DELAY);
+    heading = (int16_t)(raw_heading[1]<<8 | raw_heading[0]);
+    uint32_t opmode = sprintf(buffer, "Cur_Heading: %ld\r\n", heading);
+    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode, 1000);
+
+    HAL_Delay(1000);
+
+    HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading1, 2, HAL_MAX_DELAY);
+        heading1 = (int16_t)(raw_heading1[1]<<8 | raw_heading1[0]);
+        uint32_t opmode1 = sprintf(buffer, "Cur_Heading1: %ld\r\n", heading1);
+        HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode1, 1000);
+
+        HAL_Delay(1000);
+
+        HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading2, 2, HAL_MAX_DELAY);
+            heading2 = (int16_t)(raw_heading2[1]<<8 | raw_heading2[0]);
+            uint32_t opmode2 = sprintf(buffer, "Cur_Heading2: %ld\r\n", heading2);
+            HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode2, 1000);
+
+            HAL_Delay(1000);
+
+            HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading3, 2, HAL_MAX_DELAY);
+                heading3 = (int16_t)(raw_heading3[1]<<8 | raw_heading3[0]);
+                uint32_t opmode3 = sprintf(buffer, "Cur_Heading3: %ld\r\n", heading3);
+                HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode3, 1000);
+
+                HAL_Delay(1000);
+
+
+
+
+
+
+
+
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-	  HAL_Delay(5);
-	  /*
-	  COUNT_1 = ENCD1.get_count();
-	  COUNT_2 = ENCD2.get_count();
+    /* USER CODE END WHILE*/
 
-	  int32_t n1 = sprintf(buffer, "ENCODER 1 POSITION: %d    ",COUNT_1);
-	  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
-	  COUNT = ENCD2.get_count();
-	  int32_t n2 = sprintf(buffer, "ENCODER 2 POSITION: %d \r\n",COUNT_2);
-	  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n2, 1000);
 
-	  duty_cycle_1 = controller_1.run(COUNT_1);
-	  duty_cycle_2 = controller_2.run(COUNT_2);
+	HAL_Delay(1000);
+	HAL_I2C_Mem_Read(&hi2c1, imuaddr, calib_addr, 1, calib_state, 1, HAL_MAX_DELAY);
+	uint32_t calibstat = sprintf(buffer, "Calibrated: %ld\r\n", calib_state[0]);
+	HAL_UART_Transmit(&huart1, (uint8_t*) buffer, calibstat, 1000);
+	calib_state[0] = {0};
 
-	  MOTOR_1.Set_PWM(duty_cycle_1);
-	  MOTOR_2.Set_PWM(duty_cycle_1);
-	*/
+	uint32_t read_heading = HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading, 2, HAL_MAX_DELAY);
+	uint32_t heading_lsb = HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_headinglsb, 1, HAL_MAX_DELAY);
+	uint32_t heading_msb = HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr_msb, 1, raw_headingmsb, 1, HAL_MAX_DELAY);
 
-	  if (HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_0) == GPIO_PIN_RESET) {	// Logic state to enable motors
-		  MOTOR_1.Set_PWM(duty_cycle_1);
-		  MOTOR_2.Set_PWM(duty_cycle_2);
-	  }
-	  else {
-		  MOTOR_1.Set_PWM(0);
-		  MOTOR_2.Set_PWM(0);
-	  }
+	if (read_heading == HAL_OK)
+	{
+	    heading = (uint16_t)(raw_heading[1]<<8 | raw_heading[0]);
+	    heading_deg = heading /16;
+	    uint32_t opmode = sprintf(buffer, "Cur_Heading: %ld\r\n", heading);
+	    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode, 1000);
+	    raw_heading[2] = {0};
+	}
+
+	 HAL_Delay(200);
+	 COUNT_1 = ENCD1.get_count();
+	 COUNT_2 = ENCD2.get_count();
+
+				 // int32_t n1 = sprintf(buffer, "ENCODER 1:%d  ",COUNT_1);
+				//  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
+				//  int32_t n2 = sprintf(buffer, "ENCODER 1 %d \r\n",COUNT_2);
+				//  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n2, 1000);
+
+		  		  // State where the remote button is pressed
+				  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET) {
+					  int32_t n1 = sprintf(buffer, "BUTTON PRESSED  \r\n");
+					  MOTOR_1.Set_PWM(duty_cycle_1);	// Turn on the motors when the button is pressed
+					  MOTOR_2.Set_PWM(duty_cycle_2);
+					  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
+					  //HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
+
+				  // State where the remote button is not pressed
+				      } else {
+						  int32_t n1 = sprintf(buffer, "BUTTON NOT PRESSED \r\n ");
+						 // HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
+						  MOTOR_1.Set_PWM(0);	// Turn off the motors when the button is not pressed
+						  MOTOR_2.Set_PWM(0);
+						  FLYWHEEL.Set_PWM(0);
+				      }
+
 
     /* USER CODE BEGIN 3 */
   }
@@ -207,6 +328,108 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
+
+/**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 0;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 4899;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+  HAL_TIM_MspPostInit(&htim1);
+
 }
 
 /**
@@ -365,6 +588,55 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
+
+}
+
+/**
+  * @brief TIM5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM5_Init(void)
+{
+
+  /* USER CODE BEGIN TIM5_Init 0 */
+
+  /* USER CODE END TIM5_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM5_Init 1 */
+
+  /* USER CODE END TIM5_Init 1 */
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 95;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim5.Init.Period = 19999;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM5_Init 2 */
+
+  /* USER CODE END TIM5_Init 2 */
+  HAL_TIM_MspPostInit(&htim5);
 
 }
 

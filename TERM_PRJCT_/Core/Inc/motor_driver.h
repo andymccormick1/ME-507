@@ -72,4 +72,23 @@ public:
 	int16_t run(int32_t CURR_CNT);			// prototype for method to return duty cycle for given current encoder position
 
 };
+
+// Class Motor Driver used to control the PWM signal for the duty cycle of a DC motor
+class servo_driver {
+// Private attributes and functions can only be accessed from within the class
+private:
+	int16_t	ANGLE; 				// signed integer from representing the current duty cycle
+	uint32_t channel ;			// timer channel for pwm pin 1
+	TIM_HandleTypeDef* htim;	// timer channel handle
+
+// Public attributes and functions can be used anywhere that has access to
+// the motor driver object
+public:
+	servo_driver(void);								// Prototype for default constructor
+	servo_driver(TIM_HandleTypeDef* htim,           // Prototype for initializing constructor
+        		uint32_t channel);
+    void Set_Position(int16_t	ANGLE);        // Prototype for set pwm method
+};
+
+
 #endif /* INC_MOTOR_DRIVER_H_ */

@@ -11,3 +11,6 @@ motor_driver.cpp:142:6:void feedback_controller::set_setpoint(int32_t)	1
 motor_driver.cpp:148:6:void feedback_controller::set_KP(int16_t)	1
 motor_driver.cpp:155:6:void feedback_controller::set_KI(int16_t)	1
 motor_driver.cpp:162:9:int16_t feedback_controller::run(int32_t)	1
+motor_driver.cpp:174:1:servo_driver::servo_driver()	1
+motor_driver.cpp:180:1:servo_driver::servo_driver(TIM_HandleTypeDef*, uint32_t)	1
+motor_driver.cpp:193:6:void servo_driver::Set_Position(int16_t)	7
