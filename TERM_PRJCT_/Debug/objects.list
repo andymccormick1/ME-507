@@ -1,4 +1,8 @@
 "./Core/Inc/motor_driver.o"
+"./Core/Src/BNO055.o"
+"./Core/Src/Location_Task.o"
+"./Core/Src/Movement_task.o"
+"./Core/Src/Sorting_Sucking_Task.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32f4xx_hal_msp.o"
 "./Core/Src/stm32f4xx_it.o"

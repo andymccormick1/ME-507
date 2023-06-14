@@ -19,6 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "motor_driver.h"
+#include "BNO055.h"
+#include "movement_task.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -38,7 +40,7 @@ int16_t duty_cycle_flywheel = 5000;
 int32_t SP1 = 1000;
 int32_t SP2 = 1000;
 
-int16_t KP = 0;
+int16_t KP = 1;
 int16_t ANGLE = 0;
 /* USER CODE END PTD */
 
@@ -123,13 +125,15 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart1, (uint8_t*) &char_buffer, 1);	// Initialize UART Receive
-           encoder_reader ENCD1 = encoder_reader(&htim3);
-           encoder_reader ENCD2 = encoder_reader(&htim4);
+           encoder_reader ENCD1 = encoder_reader(&htim3); //A6 A7
+           encoder_reader ENCD2 = encoder_reader(&htim4); //B6 B7
            motor_driver MOTOR_1 = motor_driver(&htim2, TIM_CHANNEL_1, TIM_CHANNEL_2);		// Initialize the motor driver object as MOTOR_1
+           // A5 A1
            motor_driver MOTOR_2 = motor_driver(&htim2, TIM_CHANNEL_3, TIM_CHANNEL_4);		// Initialize the motor driver object as MOTOR_2
+           // A2 A3
            feedback_controller controller_1 = feedback_controller();
            feedback_controller controller_2 = feedback_controller();
-           motor_driver FLYWHEEL = motor_driver(&htim1, TIM_CHANNEL_1, TIM_CHANNEL_2);
+           motor_driver FLYWHEEL = motor_driver(&htim1, TIM_CHANNEL_1, TIM_CHANNEL_2); // A8 A9
 
            controller_1.set_KP(KP);
            controller_2.set_KP(KP);
@@ -137,7 +141,11 @@ int main(void)
            controller_1.set_setpoint(SP1);
            controller_2.set_setpoint(SP2);
 
+           BNO055_imu IMU = BNO055_imu(&hi2c1);
+
            servo_driver SERVO1 = servo_driver(&htim5,TIM_CHANNEL_1);
+
+           //movement_task task1 = movement_task(IMU, MOTOR_1, MOTOR_2, ENCD1, ENCD2, controller_1, controller_2);
 
 // I2C Testing:
 
@@ -148,6 +156,11 @@ int main(void)
 #define calib_addr          0x35
 #define pwrmode_addr        0x3E
 #define unit_select_addr    0x3B
+
+
+
+
+
 
     uint8_t config_mode = 0x00;
     uint8_t imu_mode = 0b00001000;
@@ -170,50 +183,8 @@ int main(void)
     uint32_t test = HAL_I2C_IsDeviceReady(&hi2c1, imuaddr, 1, HAL_MAX_DELAY);
 
     uint32_t a = sprintf(buffer, "Device Ready: %ld \r\n", test);
-    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, a, 1000);
+    FLYWHEEL.Set_PWM(duty_cycle_flywheel);
 
-    HAL_I2C_Mem_Write(&hi2c1, imuaddr, oprmode_addr, 1, &imu_mode, 1, HAL_MAX_DELAY);
-    HAL_Delay(10);
-    HAL_I2C_Mem_Read(&hi2c1, imuaddr, oprmode_addr, 1, cur_opmode, 1, HAL_MAX_DELAY);
-    HAL_Delay(10);
-//    HAL_I2C_Mem_Write(&hi2c1, imuaddr, unit_select_addr, 1, unit_sel, 1, HAL_MAX_DELAY);
-
-    HAL_I2C_Mem_Read(&hi2c1, imuaddr, pwrmode_addr, 1, cur_pwrmode, 1, HAL_MAX_DELAY);
-    uint32_t pwrmode = sprintf(buffer, "Cur Power: %ld\r\n", cur_pwrmode[0]);
-    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, pwrmode, 1000);
-
-    uint32_t op1mode = sprintf(buffer, "Cur Op Mode: %ld\r\n", cur_opmode[0]);
-    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, op1mode, 1000);
-
-
-
-    HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading, 2, HAL_MAX_DELAY);
-    heading = (int16_t)(raw_heading[1]<<8 | raw_heading[0]);
-    uint32_t opmode = sprintf(buffer, "Cur_Heading: %ld\r\n", heading);
-    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode, 1000);
-
-    HAL_Delay(1000);
-
-    HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading1, 2, HAL_MAX_DELAY);
-        heading1 = (int16_t)(raw_heading1[1]<<8 | raw_heading1[0]);
-        uint32_t opmode1 = sprintf(buffer, "Cur_Heading1: %ld\r\n", heading1);
-        HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode1, 1000);
-
-        HAL_Delay(1000);
-
-        HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading2, 2, HAL_MAX_DELAY);
-            heading2 = (int16_t)(raw_heading2[1]<<8 | raw_heading2[0]);
-            uint32_t opmode2 = sprintf(buffer, "Cur_Heading2: %ld\r\n", heading2);
-            HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode2, 1000);
-
-            HAL_Delay(1000);
-
-            HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading3, 2, HAL_MAX_DELAY);
-                heading3 = (int16_t)(raw_heading3[1]<<8 | raw_heading3[0]);
-                uint32_t opmode3 = sprintf(buffer, "Cur_Heading3: %ld\r\n", heading3);
-                HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode3, 1000);
-
-                HAL_Delay(1000);
 
 
 
@@ -231,36 +202,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE*/
+    /* USER CODE END WHILE */
+	  /*
+	  	  task1.run();
+	  	  int16_t duty = task1.get_duty();
+	  	  uint32_t n1 = sprintf(buffer, "Duty %ld\r\n", duty);
+	  	  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
+	  	  HAL_Delay(100);
+	  	  */
 
 
-	HAL_Delay(1000);
-	HAL_I2C_Mem_Read(&hi2c1, imuaddr, calib_addr, 1, calib_state, 1, HAL_MAX_DELAY);
-	uint32_t calibstat = sprintf(buffer, "Calibrated: %ld\r\n", calib_state[0]);
-	HAL_UART_Transmit(&huart1, (uint8_t*) buffer, calibstat, 1000);
-	calib_state[0] = {0};
-
-	uint32_t read_heading = HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_heading, 2, HAL_MAX_DELAY);
-	uint32_t heading_lsb = HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr, 1, raw_headinglsb, 1, HAL_MAX_DELAY);
-	uint32_t heading_msb = HAL_I2C_Mem_Read(&hi2c1, imuaddr, heading_addr_msb, 1, raw_headingmsb, 1, HAL_MAX_DELAY);
-
-	if (read_heading == HAL_OK)
-	{
-	    heading = (uint16_t)(raw_heading[1]<<8 | raw_heading[0]);
-	    heading_deg = heading /16;
-	    uint32_t opmode = sprintf(buffer, "Cur_Heading: %ld\r\n", heading);
-	    HAL_UART_Transmit(&huart1, (uint8_t*) buffer, opmode, 1000);
-	    raw_heading[2] = {0};
-	}
 
 	 HAL_Delay(200);
 	 COUNT_1 = ENCD1.get_count();
 	 COUNT_2 = ENCD2.get_count();
 
-				 // int32_t n1 = sprintf(buffer, "ENCODER 1:%d  ",COUNT_1);
-				//  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
-				//  int32_t n2 = sprintf(buffer, "ENCODER 1 %d \r\n",COUNT_2);
-				//  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n2, 1000);
+				 int32_t n3 = sprintf(buffer, "ENCODER 1:%d  ",COUNT_1);
+				HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n3, 1000);
+				int32_t n2 = sprintf(buffer, "ENCODER 1 %d \r\n",COUNT_2);
+				HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n2, 1000);
 
 		  		  // State where the remote button is pressed
 				  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET) {
@@ -268,15 +228,15 @@ int main(void)
 					  MOTOR_1.Set_PWM(duty_cycle_1);	// Turn on the motors when the button is pressed
 					  MOTOR_2.Set_PWM(duty_cycle_2);
 					  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
-					  //HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
+					  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
 
 				  // State where the remote button is not pressed
 				      } else {
 						  int32_t n1 = sprintf(buffer, "BUTTON NOT PRESSED \r\n ");
-						 // HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
+						  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
 						  MOTOR_1.Set_PWM(0);	// Turn off the motors when the button is not pressed
 						  MOTOR_2.Set_PWM(0);
-						  FLYWHEEL.Set_PWM(0);
+						  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
 				      }
 
 

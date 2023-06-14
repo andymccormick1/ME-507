@@ -1,0 +1,8 @@
+../Core/Src/BNO055.cpp:13:1:BNO055_imu::BNO055_imu()	16	static
+../Core/Src/BNO055.cpp:19:1:BNO055_imu::BNO055_imu(I2C_HandleTypeDef*)	40	static
+../Core/Src/BNO055.cpp:47:10:uint16_t BNO055_imu::update_heading()	32	static
+../Core/Src/BNO055.cpp:55:9:uint8_t BNO055_imu::get_heading()	16	static
+../Core/Src/BNO055.cpp:60:6:void BNO055_imu::zero_heading()	40	static
+../Core/Src/BNO055.cpp:69:9:uint8_t BNO055_imu::calibrate()	32	static
+../Core/Src/BNO055.cpp:76:9:uint8_t BNO055_imu::get_calibration()	16	static
+../Core/Src/BNO055.cpp:81:9:uint8_t BNO055_imu::get_state()	16	static

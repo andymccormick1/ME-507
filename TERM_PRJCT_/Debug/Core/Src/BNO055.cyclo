@@ -1,0 +1,8 @@
+BNO055.cpp:13:1:BNO055_imu::BNO055_imu()	1
+BNO055.cpp:19:1:BNO055_imu::BNO055_imu(I2C_HandleTypeDef*)	4
+BNO055.cpp:47:10:uint16_t BNO055_imu::update_heading()	1
+BNO055.cpp:55:9:uint8_t BNO055_imu::get_heading()	1
+BNO055.cpp:60:6:void BNO055_imu::zero_heading()	1
+BNO055.cpp:69:9:uint8_t BNO055_imu::calibrate()	1
+BNO055.cpp:76:9:uint8_t BNO055_imu::get_calibration()	1
+BNO055.cpp:81:9:uint8_t BNO055_imu::get_state()	1

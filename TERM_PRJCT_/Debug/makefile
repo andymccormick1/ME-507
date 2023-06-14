@@ -76,8 +76,8 @@ all: main-build
 main-build: TERM_PRJCT_.elf secondary-outputs
 
 # Tool invocations
-TERM_PRJCT_.elf TERM_PRJCT_.map: $(OBJS) $(USER_OBJS) C:\Users\caleb\STM32CubeIDE\workspace_1.12.0\TERM_PRJCT_\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "TERM_PRJCT_.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\caleb\STM32CubeIDE\workspace_1.12.0\TERM_PRJCT_\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TERM_PRJCT_.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+TERM_PRJCT_.elf TERM_PRJCT_.map: $(OBJS) $(USER_OBJS) /Users/andymccormick/Documents/GitHub/ME-507/TERM_PRJCT_/STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "TERM_PRJCT_.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/andymccormick/Documents/GitHub/ME-507/TERM_PRJCT_/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TERM_PRJCT_.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
