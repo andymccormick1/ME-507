@@ -33,7 +33,7 @@ private:
 	void state_3(void); // Move in Circle State
 	void state_4(void); // Return Home State
 
-	BNO055_imu IMU;
+
 	motor_driver Left_Mot;
 	motor_driver Right_Mot;
 	encoder_reader Left_Encoder;
@@ -55,8 +55,7 @@ private:
 
 public:
 	movement_task(void);
-	movement_task(BNO055_imu IMU,
-			motor_driver Left_Mot,
+	movement_task(motor_driver Left_Mot,
 			motor_driver Right_Mot,
 			encoder_reader Left_Encoder,
 			encoder_reader Right_Encoder,

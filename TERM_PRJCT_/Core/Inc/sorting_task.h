@@ -13,6 +13,19 @@
 #include "BNO055.h"
 #include "motor_driver.h"
 
+#define rgb_addr      0x29<<1
+#define clrdata_addr 0x94
+#define enable_addr   0x80
+#define status_addr   0x93
+#define timing_addr   0x81
+#define wait_addr     0x82
+#define clr_addr      0x94
+#define red_addr      0x96
+#define green_addr    0x98
+#define blue_addr     0x98
+
+
+
 class sort_task
 {
 private:
@@ -40,10 +53,15 @@ private:
 	uint32_t curr_time;
 	uint16_t start_count;
 
+	I2C_HandleTypeDef* hi2c;
+
+	uint16_t red_val,green_val,blue_val;
+
 public:
 	sort_task(void);
 	sort_task(servo_driver servo,
-			UART_HandleTypeDef* huart);
+			UART_HandleTypeDef* huart,
+			I2C_HandleTypeDef* hi2c);
 
 	void run(void);
 

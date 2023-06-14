@@ -1,0 +1,5 @@
+sorting_task.cpp:16:1:sort_task::sort_task(servo_driver, UART_HandleTypeDef*, I2C_HandleTypeDef*)	1
+sorting_task.cpp:38:6:void sort_task::run()	3
+sorting_task.cpp:55:6:void sort_task::state_0()	1
+sorting_task.cpp:72:6:void sort_task::state_1()	4
+sorting_task.cpp:100:6:void sort_task::state_2()	3

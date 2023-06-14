@@ -12,8 +12,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 
-movement_task::movement_task(BNO055_imu IMU,
-		motor_driver _Left_Mot,
+movement_task::movement_task(motor_driver _Left_Mot,
 		motor_driver _Right_Mot,
 		encoder_reader _Left_Encoder,
 		encoder_reader _Right_Encoder,
@@ -241,8 +240,8 @@ void movement_task::state_3(void)
 			start_count = 1;
 		}
 		curr_time = HAL_GetTick() - start_ticks;
-		right_duty = 2500;
-		left_duty  = 5000;
+		right_duty = 1250;
+		left_duty  = 2500;
 
 	} else
 	{
@@ -253,7 +252,7 @@ void movement_task::state_3(void)
 	Right_Mot.Set_PWM(right_duty);
 	Left_Mot.Set_PWM(left_duty);
 
-	if (curr_time > 10000)
+	if (curr_time > 20000)
 	{
 		state = 4;
 		start_count = 0;

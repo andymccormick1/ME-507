@@ -4,6 +4,7 @@
 "./Core/Src/Movement_task.o"
 "./Core/Src/Sorting_Sucking_Task.o"
 "./Core/Src/main.o"
+"./Core/Src/sorting_task.o"
 "./Core/Src/stm32f4xx_hal_msp.o"
 "./Core/Src/stm32f4xx_it.o"
 "./Core/Src/syscalls.o"

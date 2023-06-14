@@ -21,6 +21,7 @@
 #include "motor_driver.h"
 #include "BNO055.h"
 #include "movement_task.h"
+#include "sorting_task.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -145,12 +146,12 @@ int main(void)
            //controller_1.set_setpoint(SP1);
            //controller_2.set_setpoint(SP2);
 
-           BNO055_imu IMU = BNO055_imu(&hi2c1);
+         //  BNO055_imu IMU = BNO055_imu(&hi2c1);
 
            servo_driver SERVO1 = servo_driver(&htim5,TIM_CHANNEL_1);
 
-           movement_task task1 = movement_task(IMU, MOTOR_1, MOTOR_2, ENCD1, ENCD2, controller_1, controller_2, &huart1);
-
+           movement_task task1 = movement_task(MOTOR_1, MOTOR_2, ENCD1, ENCD2, controller_1, controller_2, &huart1);
+           sort_task	task2 = sort_task(SERVO1, &huart1,&hi2c1);
 // I2C Testing:
 
 #define imuaddr             0x28<<1
@@ -206,46 +207,33 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-	  	  task1.run();
+	  	task1.run();
+	  	//  task2.run();
 
 
-	  	  HAL_Delay(5);
+/*
+	  	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
+	  	  {
+
+	  		  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
+	  					  // State where the remote button is not pressed
+	  		char buffer[50] = {0};
+	  		int32_t a1 = sprintf(buffer, "Button Pressed \r\n");
+	  		HAL_UART_Transmit(huart,(uint8_t*) buffer, a1, 1000);
+	  	  } else
+	  	  {
+	  		char buffer[50] = {0};
+	  		int32_t a2 = sprintf(buffer, "Button Not Pressed \r\n");
+	  		HAL_UART_Transmit(huart,(uint8_t*) buffer, a2, 1000);
+	  	  	FLYWHEEL.Set_PWM(0);
+	  	  }
+	  	  */
 
 
 
-	  	  /*
-uint16_t cur_head = IMU.update_heading();
-uint32_t shit = sprintf(buffer, "Current HEading?: %ld\n\r", cur_head);
-HAL_UART_Transmit(&huart1, (uint8_t*) buffer, shit, 1000);
 
 
-	 HAL_Delay(200);
-	 COUNT_1 = ENCD1.get_count();
-	 COUNT_2 = ENCD2.get_count();
 
-				int32_t n3 = sprintf(buffer, "ENCODER 1: %d  ",COUNT_1);
-				HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n3, 1000);
-				int32_t n2 = sprintf(buffer, "ENCODER 2: %d \r\n",COUNT_2);
-				HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n2, 1000);
-
-		  		  // State where the remote button is pressed
-				  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET) {
-					  int32_t n1 = sprintf(buffer, "BUTTON PRESSED  \r\n");
-					  MOTOR_1.Set_PWM(duty_cycle_1);	// Turn on the motors when the button is pressed
-					  MOTOR_2.Set_PWM(duty_cycle_2);
-					  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
-					  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
-
-				  // State where the remote button is not pressed
-				      } else {
-						  int32_t n1 = sprintf(buffer, "BUTTON NOT PRESSED \r\n ");
-						  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
-						  MOTOR_1.Set_PWM(0);	// Turn off the motors when the button is not pressed
-						  MOTOR_2.Set_PWM(0);
-						  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
-				      }
-
-*/
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
