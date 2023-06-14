@@ -18,7 +18,8 @@ movement_task::movement_task(BNO055_imu IMU,
 		encoder_reader _Left_Encoder,
 		encoder_reader _Right_Encoder,
 		feedback_controller _Left_Feedback,
-		feedback_controller _Right_Feedback)
+		feedback_controller _Right_Feedback,
+		UART_HandleTypeDef* _huart)
 				:state(0), runs(0),
 				state_list(new state_fcn[5]{(movement_task::state_fcn) &movement_task::state_0,
 						(movement_task::state_fcn) &movement_task::state_1,
@@ -35,7 +36,11 @@ movement_task::movement_task(BNO055_imu IMU,
 				right_sp(0),
 				left_sp(0),
 				right_duty(0),
-				left_duty(0)
+				left_duty(0),
+				huart(_huart),
+				start_ticks(0),
+				curr_time(0),
+				start_count(0)
 {
 	printf("Initialized?");
 }
@@ -72,68 +77,153 @@ void movement_task::state_0(void)
 void movement_task::state_1(void)
 {
 	// Move out of Home Area
-	right_sp = 1000;
+	right_sp = 650;
 	left_sp = right_sp;
 
+	Left_Feedback.set_setpoint(left_sp);
+	Right_Feedback.set_setpoint(right_sp);
+
+
+
+	char buffer[50] = {0};
 	int32_t right_count = Right_Encoder.get_count();
 	int32_t left_count = Left_Encoder.get_count();
+
+	int32_t n3 = sprintf(buffer, "Right Count: %d  ",right_count);
+	HAL_UART_Transmit(huart,(uint8_t*) buffer, n3, 1000);
+	int32_t n2 = sprintf(buffer, "Left Count: %d \r\n",left_count);
+	HAL_UART_Transmit(huart,(uint8_t*) buffer, n2, 1000);
+
+
+
 	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
 	{
+		if (start_count == 0)
+		{
+			start_ticks = HAL_GetTick();
+			start_count = 1;
+		}
+		curr_time = HAL_GetTick() - start_ticks;
+
+		int32_t n1 = sprintf(buffer, "BUTTON PRESSED  \r\n");
+		HAL_UART_Transmit(huart,(uint8_t*) buffer, n1, 1000);
 
 
-	Right_Feedback.set_setpoint(right_sp);
-	Left_Feedback.set_setpoint(left_sp);
 
-	right_duty = Right_Feedback.run(right_count);
-	left_duty = Left_Feedback.run(left_count);
+		right_duty = Right_Feedback.run(right_count);
+		left_duty = Left_Feedback.run(left_count);
 
-	Right_Mot.Set_PWM(right_duty);
-	Left_Mot.Set_PWM(left_duty);
+		if (right_duty > 2500){
+			right_duty = 2500;
+		}
+		else if (right_duty < -2500){
+			right_duty = -2500;
+		}
+
+		if (left_duty > 2500){
+			left_duty = 2500;
+		}
+		else if (left_duty < -2500){
+			left_duty = -2500;
+		}
+
+
+
 	} else
 	{
-		Right_Mot.Set_PWM(0);
-		Left_Mot.Set_PWM(0);
-	}
+		char buffer[50] = {0};
+		int32_t n1 = sprintf(buffer, "BUTTON Not PRESSED  \r\n");
+		//HAL_UART_Transmit(huart,(uint8_t*) buffer, n1, 1000);
+		right_duty = 0;
+		left_duty = 0;
 
-	if (((right_sp - right_count) < 10) && ((left_sp - left_count) < 10))
+	}
+	Right_Mot.Set_PWM(right_duty);
+	Left_Mot.Set_PWM(left_duty);
+
+
+
+	if (curr_time > 5000)
 	{
 		state = 2;
+		start_count = 0;
 	}
-
-
-
 
 }
 
 void movement_task::state_2(void)
 {
-	// Rotate To Direction to Start Circle
-	right_sp = 1000;
-	left_sp = -1000;
+	// Move out of Home Area
+	right_sp = 896;
+	left_sp = 395;
 
+	Left_Feedback.set_setpoint(left_sp);
+	Right_Feedback.set_setpoint(right_sp);
+
+
+
+	char buffer[50] = {0};
 	int32_t right_count = Right_Encoder.get_count();
 	int32_t left_count = Left_Encoder.get_count();
+
+	int32_t n3 = sprintf(buffer, "Right Count: %d  ",right_count);
+	HAL_UART_Transmit(huart,(uint8_t*) buffer, n3, 1000);
+	int32_t n2 = sprintf(buffer, "Left Count: %d \r\n",left_count);
+	HAL_UART_Transmit(huart,(uint8_t*) buffer, n2, 1000);
+
+
+
 	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
 	{
+		if (start_count == 0)
+		{
+			start_ticks = HAL_GetTick();
+			start_count = 1;
+		}
+		curr_time = HAL_GetTick() - start_ticks;
+
+		int32_t n1 = sprintf(buffer, "BUTTON PRESSED  \r\n");
+		HAL_UART_Transmit(huart,(uint8_t*) buffer, n1, 1000);
 
 
-	Right_Feedback.set_setpoint(right_sp);
-	Left_Feedback.set_setpoint(left_sp);
 
-	right_duty = Right_Feedback.run(right_count);
-	left_duty = Left_Feedback.run(left_count);
+		right_duty = Right_Feedback.run(right_count);
+		left_duty = Left_Feedback.run(left_count);
 
-	Right_Mot.Set_PWM(right_duty);
-	Left_Mot.Set_PWM(left_duty);
+		if (right_duty > 2500){
+			right_duty = 2500;
+		}
+		else if (right_duty < -2500){
+			right_duty = -2500;
+		}
+
+		if (left_duty > 2500){
+			left_duty = 2500;
+		}
+		else if (left_duty < -2500){
+			left_duty = -2500;
+		}
+
+
+
 	} else
 	{
-		Right_Mot.Set_PWM(0);
-		Left_Mot.Set_PWM(0);
-	}
+		char buffer[50] = {0};
+		int32_t n1 = sprintf(buffer, "BUTTON Not PRESSED  \r\n");
+		//HAL_UART_Transmit(huart,(uint8_t*) buffer, n1, 1000);
+		right_duty = 0;
+		left_duty = 0;
 
-	if (((right_sp - right_count) < 10) && ((left_sp - left_count) < 10))
+	}
+	Right_Mot.Set_PWM(right_duty);
+	Left_Mot.Set_PWM(left_duty);
+
+
+
+	if (curr_time > 5000)
 	{
-		state = 4;
+		state = 3;
+		start_count = 0;
 	}
 
 }
@@ -141,13 +231,43 @@ void movement_task::state_2(void)
 void movement_task::state_3(void)
 {
 	// Drive In Circle
-	state = 4;
+
+
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
+	{
+		if (start_count == 0)
+		{
+			start_ticks = HAL_GetTick();
+			start_count = 1;
+		}
+		curr_time = HAL_GetTick() - start_ticks;
+		right_duty = 2500;
+		left_duty  = 5000;
+
+	} else
+	{
+		right_duty = 0;
+		left_duty = 0;
+	}
+
+	Right_Mot.Set_PWM(right_duty);
+	Left_Mot.Set_PWM(left_duty);
+
+	if (curr_time > 10000)
+	{
+		state = 4;
+		start_count = 0;
+	}
 }
 
 void movement_task::state_4(void)
 {
 	// Return Home
-	state = 1;
+	Right_Mot.Set_PWM(0);
+	Left_Mot.Set_PWM(0);
+	char buffer[50] = {0};
+	int32_t s4 = sprintf(buffer, "State 4\r\n");
+	HAL_UART_Transmit(huart,(uint8_t*) buffer, s4, 1000);
 }
 
 int32_t movement_task::get_duty(void)

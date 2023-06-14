@@ -47,10 +47,10 @@ void motor_driver::Set_PWM(int16_t	_Duty_Cycle)
 	// Saturate the input between -1000 and 1000
 
 
-	if (_Duty_Cycle < -10000) {
-		_Duty_Cycle = -10000;
-	} else if (_Duty_Cycle > 10000){
-		_Duty_Cycle = 10000;
+	if (_Duty_Cycle < -5000) {
+		_Duty_Cycle = -5000;
+	} else if (_Duty_Cycle > 5000){
+		_Duty_Cycle = 5000;
 	}
 
 

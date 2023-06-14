@@ -41,12 +41,17 @@ private:
 	feedback_controller Left_Feedback;
 	feedback_controller Right_Feedback;
 
+	UART_HandleTypeDef * huart;
+
 	int32_t right_sp;
 	int32_t left_sp;
 
 	int16_t right_duty;
 	int16_t left_duty;
 
+	uint32_t start_ticks;
+	uint32_t curr_time;
+	uint16_t start_count;
 
 public:
 	movement_task(void);
@@ -56,7 +61,8 @@ public:
 			encoder_reader Left_Encoder,
 			encoder_reader Right_Encoder,
 			feedback_controller Left_Feedback,
-			feedback_controller Right_Feedback);
+			feedback_controller Right_Feedback,
+			UART_HandleTypeDef* huart);
 
 	void run(void);
 

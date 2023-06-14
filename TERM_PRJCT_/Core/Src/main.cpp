@@ -40,7 +40,7 @@ int16_t duty_cycle_flywheel = 5000;
 int32_t SP1 = 1000;
 int32_t SP2 = 1000;
 
-int16_t KP = 1;
+int16_t KP = 20;
 int16_t ANGLE = 0;
 /* USER CODE END PTD */
 
@@ -126,10 +126,14 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_UART_Receive_IT(&huart1, (uint8_t*) &char_buffer, 1);	// Initialize UART Receive
            encoder_reader ENCD1 = encoder_reader(&htim3); //A6 A7
+           // Encoder 1 is the Left Rear Wheel
            encoder_reader ENCD2 = encoder_reader(&htim4); //B6 B7
+           // Encoder 2 is the right rear Wheel
            motor_driver MOTOR_1 = motor_driver(&htim2, TIM_CHANNEL_1, TIM_CHANNEL_2);		// Initialize the motor driver object as MOTOR_1
+           // Motor Driver 1 is The Left Rear Wheel
            // A5 A1
            motor_driver MOTOR_2 = motor_driver(&htim2, TIM_CHANNEL_3, TIM_CHANNEL_4);		// Initialize the motor driver object as MOTOR_2
+           // Motor Driver 2 is The Right Rear Wheel
            // A2 A3
            feedback_controller controller_1 = feedback_controller();
            feedback_controller controller_2 = feedback_controller();
@@ -138,14 +142,14 @@ int main(void)
            controller_1.set_KP(KP);
            controller_2.set_KP(KP);
 
-           controller_1.set_setpoint(SP1);
-           controller_2.set_setpoint(SP2);
+           //controller_1.set_setpoint(SP1);
+           //controller_2.set_setpoint(SP2);
 
            BNO055_imu IMU = BNO055_imu(&hi2c1);
 
            servo_driver SERVO1 = servo_driver(&htim5,TIM_CHANNEL_1);
 
-           //movement_task task1 = movement_task(IMU, MOTOR_1, MOTOR_2, ENCD1, ENCD2, controller_1, controller_2);
+           movement_task task1 = movement_task(IMU, MOTOR_1, MOTOR_2, ENCD1, ENCD2, controller_1, controller_2, &huart1);
 
 // I2C Testing:
 
@@ -180,10 +184,8 @@ int main(void)
 	uint8_t heading_deg;
 	uint8_t raw_headinglsb[1], raw_headingmsb[1];
 
-    uint32_t test = HAL_I2C_IsDeviceReady(&hi2c1, imuaddr, 1, HAL_MAX_DELAY);
 
-    uint32_t a = sprintf(buffer, "Device Ready: %ld \r\n", test);
-    FLYWHEEL.Set_PWM(duty_cycle_flywheel);
+
 
 
 
@@ -203,23 +205,27 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  /*
-	  	  task1.run();
-	  	  int16_t duty = task1.get_duty();
-	  	  uint32_t n1 = sprintf(buffer, "Duty %ld\r\n", duty);
-	  	  HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n1, 1000);
-	  	  HAL_Delay(100);
-	  	  */
 
+	  	  task1.run();
+
+
+	  	  HAL_Delay(5);
+
+
+
+	  	  /*
+uint16_t cur_head = IMU.update_heading();
+uint32_t shit = sprintf(buffer, "Current HEading?: %ld\n\r", cur_head);
+HAL_UART_Transmit(&huart1, (uint8_t*) buffer, shit, 1000);
 
 
 	 HAL_Delay(200);
 	 COUNT_1 = ENCD1.get_count();
 	 COUNT_2 = ENCD2.get_count();
 
-				 int32_t n3 = sprintf(buffer, "ENCODER 1:%d  ",COUNT_1);
+				int32_t n3 = sprintf(buffer, "ENCODER 1: %d  ",COUNT_1);
 				HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n3, 1000);
-				int32_t n2 = sprintf(buffer, "ENCODER 1 %d \r\n",COUNT_2);
+				int32_t n2 = sprintf(buffer, "ENCODER 2: %d \r\n",COUNT_2);
 				HAL_UART_Transmit(&huart1,(uint8_t*) buffer, n2, 1000);
 
 		  		  // State where the remote button is pressed
@@ -239,7 +245,7 @@ int main(void)
 						  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
 				      }
 
-
+*/
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
