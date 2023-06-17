@@ -1,0 +1,99 @@
+\doxysection{servo\+\_\+driver Class Reference}
+\label{classservo__driver}\index{servo\_driver@{servo\_driver}}
+
+
+Class Motor Driver used to control the PWM signal for the position of a servo motor.  
+
+
+
+
+{\ttfamily \#include $<$servo\+\_\+driver.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{classservo__driver_a0bde89c2331c0ecd8c76f5b7c51e9603} 
+{\bfseries servo\+\_\+driver} (void)
+\begin{DoxyCompactList}\small\item\em Prototype default constructor. \end{DoxyCompactList}\item 
+\textbf{ servo\+\_\+driver} (TIM\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ htim}, uint32\+\_\+t \textbf{ channel})
+\begin{DoxyCompactList}\small\item\em Constructor for all servo objects. \end{DoxyCompactList}\item 
+void \textbf{ Set\+\_\+\+Position} (int16\+\_\+t \textbf{ ANGLE})
+\begin{DoxyCompactList}\small\item\em Function to set the servo position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int16\+\_\+t \textbf{ ANGLE}
+\begin{DoxyCompactList}\small\item\em Private vairbale for the servo angle. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ channel}
+\begin{DoxyCompactList}\small\item\em Private variable for the channel the servo is running on. \end{DoxyCompactList}\item 
+TIM\+\_\+\+Handle\+Type\+Def $\ast$ \textbf{ htim}
+\begin{DoxyCompactList}\small\item\em Pointer to a pre-\/initialized timer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class Motor Driver used to control the PWM signal for the position of a servo motor. 
+
+The servo driver class provides an interface to set the position of the servo motor. This is accomplished by setting the duty cycle of a pwm timer. This timer must be configured before creating a servo driver and must be set to a specific prescaler and ARR value. (95 and 19999 for current implementation) 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{classservo__driver_a24c38727bd79a7710fb81c956424f623} 
+\index{servo\_driver@{servo\_driver}!servo\_driver@{servo\_driver}}
+\index{servo\_driver@{servo\_driver}!servo\_driver@{servo\_driver}}
+\doxysubsubsection{servo\_driver()}
+{\footnotesize\ttfamily servo\+\_\+driver\+::servo\+\_\+driver (\begin{DoxyParamCaption}\item[{TIM\+\_\+\+Handle\+Type\+Def $\ast$}]{htim,  }\item[{uint32\+\_\+t}]{channel }\end{DoxyParamCaption})}
+
+
+
+Constructor for all servo objects. 
+
+The servo driver is created with a timer and a channel. The corresponding output pin of the timer and channel connects directly to the servo command line. 
+
+\doxysubsection{Member Function Documentation}
+\label{classservo__driver_a42612ad81cb57d845bb2cb8eb5f96b4d} 
+\index{servo\_driver@{servo\_driver}!Set\_Position@{Set\_Position}}
+\index{Set\_Position@{Set\_Position}!servo\_driver@{servo\_driver}}
+\doxysubsubsection{Set\_Position()}
+{\footnotesize\ttfamily void servo\+\_\+driver\+::\+Set\+\_\+\+Position (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{ANGLE }\end{DoxyParamCaption})}
+
+
+
+Function to set the servo position. 
+
+The set position takes the desired position in degrees as an input and converts the degree value desired to a necessary pulse width for servo control. Theposition saturates and +/-\/ 90 degrees. In order to calcualte the pulse with, the degree value is multiplied by 500 and divided by 90. This value is either added to or subtracted from 1500 depending on if the desired position is positive or negative. A pulse width of 1500 corresponds to an angle of 0. The timer channel is then set to produce a waveform with the desired characteristics. 
+
+\doxysubsection{Member Data Documentation}
+\label{classservo__driver_af1edc6c761e6c71ce8d9b2f80a64f1aa} 
+\index{servo\_driver@{servo\_driver}!ANGLE@{ANGLE}}
+\index{ANGLE@{ANGLE}!servo\_driver@{servo\_driver}}
+\doxysubsubsection{ANGLE}
+{\footnotesize\ttfamily int16\+\_\+t servo\+\_\+driver\+::\+ANGLE\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private vairbale for the servo angle. 
+
+Thsi variable corresponds to the current servo angle. This value will be used to determine the required pwm pulse width. \label{classservo__driver_a96142393b1e041d10514ee611dd57dc1} 
+\index{servo\_driver@{servo\_driver}!channel@{channel}}
+\index{channel@{channel}!servo\_driver@{servo\_driver}}
+\doxysubsubsection{channel}
+{\footnotesize\ttfamily uint32\+\_\+t servo\+\_\+driver\+::channel\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for the channel the servo is running on. 
+
+This variable is either 1, 2, 3, or 4 depending on what timer channel the servo control wire is connected to. \label{classservo__driver_aa4f9432a72b54189501f13f75d2f2ae0} 
+\index{servo\_driver@{servo\_driver}!htim@{htim}}
+\index{htim@{htim}!servo\_driver@{servo\_driver}}
+\doxysubsubsection{htim}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def$\ast$ servo\+\_\+driver\+::htim\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to a pre-\/initialized timer. 
+
+This pointer corresponds to the timer configured to run pwm for the servo control. The timer must be carefully configured to deliver to deliver the correct period and pulse width to the servo. If these values are not correct the servo will not rotate. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+servo\+\_\+driver.\+h\end{DoxyCompactItemize}

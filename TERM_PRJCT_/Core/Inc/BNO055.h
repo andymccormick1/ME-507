@@ -142,30 +142,120 @@
 #define BNO055_GYR_AM_THRESH 0x1E
 #define BNO055_GYR_AM_SET 0x1F
 
-//#define config_mode   0b00000000
-//#define imu_mode      0b00001000
-//#define unit_select   0b00000000
+//! A Class for the Use of the Adafruit BNO055 IMU
+
+/*!
+ * The BNO0855_imu class is used to communicate with the adafruit BNO055 imu over the I2C bus.
+ * This calss specifically obtains the heading value from the specific register on the imu. Although there are
+ * many additional measurements held on the imu, the heading is the only one accessed because it is the only measurement needed.
+ * Other measurements can easily be obtained by reading other registers.
+ */
 
 class BNO055_imu {
 
+
 private:
+
+	//! A Buffer for the calibration data
+	/*!
+	 * The calibration data is stored in the register with address 0x35. When this register is read in the setup method,
+	 * the current value is out in this buffer.
+	 */
 	uint8_t calib_buffer[1];
+
+	//! Private variable for the actual calibration
+	/*!
+	 * Data from the buffer is transferred to this variable for easy access.
+	 */
 	uint8_t cur_calib;
+
+	//!Private variable for the current heading
+	/*!
+	 * Data from the heading buffer is transferred to this variable as 16 bits for easy access and manipulation.
+	 */
 	uint16_t cur_heading;
+
+	//! A private variable for the current heading in degrees.
+	/*!
+	 * The number stored in the cur_heading variable is converted to degrees and stored in this variable.
+	 */
 	uint8_t heading_deg;
+
+	//! A 2 byte Buffer for the heading data.
+	/*!
+	 * Data is read from the heading register on the imu at address 0x1E. The 2 bytes (16 bits) are stored temporarily in the buffer.
+	 */
 	uint8_t heading_buffer[2];
+
+	//! A private variable describing the state of the imu
+	/*!
+	 * The state is initialized as 0. Once communication has been established, the state changes to one.
+	 * If communication is not established the program will be stuck in a while loop and print over uart the issue.
+	 */
 	uint8_t state;
+
+	//! A Pointer to the I2C bus used for communication
+	/*!
+	 * The I2C bus must be initialized and configured in the main file before the IMU object is created.
+	 * The I2C bus should be running no faster than 400 kHz, and all pins should be pulled up, preferably by external pull up resistors.
+	 */
 	I2C_HandleTypeDef* hi2c;
 
+
+
 public:
+	//! Initialization
 	BNO055_imu(void);
+
+	//! IMU initialization function
+	/*!
+	 * Takes an input of the pre-initizalized I2C bus. This function configures the IMU in IMU mode in order to allow
+	 * fusion of data outputs. This also verifies the I2C bus is working and can communicate with the IMU. Additionally,
+	 * the initialization hecks for sensor calibration before moving on, but has been removed due to implementation
+	 * difficulties.
+	 */
 	BNO055_imu(I2C_HandleTypeDef* hi2c);
 
+	//! returns the current heading in degrees.
+	/*!
+	 * This function does not update the heading, it merely returns the current value stored. This is not the msot useful function.
+	 */
 	uint8_t get_heading(void);
+
+	//! Function to calibrate the IMU
+	/*!
+	 * This function can be used to verify the IMU is calibrated. It returns the value of the calibration register.
+	 * It also et stuck in a while loop and outputs the error if the IMU is not calibrated. This should be used sparingly
+	 * as it can stop the rest of the code from running.
+	 */
 	uint8_t calibrate(void);
+
+	//! Function to get the current calibration status
+	/*!
+	 * This function purely returns the calibration status and nothing else. Can be used to verify the device is ready to output data.
+	 */
 	uint8_t get_calibration(void);
+
+	//! Function to obtain the IMU state
+	/*!
+	 * This function was used to debug the I2C bus. A state of 0 means the IMU is not communicating while
+	 * a state of 1 means the IMU is communicating.
+	 */
 	uint8_t get_state(void);
+
+	//! Function zero the heading
+	/*!
+	 * This function is used to set a heading datum of heading equal to zero. This can be useful to set the devices
+	 * home.
+	 */
 	void zero_heading(void);
+
+	//! Function to update and return the current heading
+	/*!
+	 * This function reads the Heading register and puts the 2 bytes in the heading buffer. The 2 bytes are then
+	 * put in the 16 bit heading file by shifting the MSB to the left by 8 and oring that value with the LSB.
+	 * This final value is then divided by 16 to return the heading value in degrees.
+	 */
 	uint16_t update_heading(void);
 };
 

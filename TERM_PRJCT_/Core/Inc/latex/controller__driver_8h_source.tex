@@ -1,0 +1,66 @@
+\doxysection{controller\+\_\+driver.\+h}
+\label{controller__driver_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ controller\_driver.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ Jun\ 16,\ 2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ andymccormick}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ INC\_CONTROLLER\_DRIVER\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ INC\_CONTROLLER\_DRIVER\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}stm32f4xx\_hal.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdint.h>}\ \ \ \ \ \textcolor{comment}{//\ Allows\ use\ of\ standard\ integers}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <string.h>}\ \ \ \ \ \textcolor{comment}{//\ Allows\ use\ of\ string\ ops\ like\ strcpy}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <cstdlib>}\ \ \ \ \ \ \textcolor{comment}{//\ allows\ use\ of\ functions\ like\ abs()\ for\ absolute\ value}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }feedback\_controller\{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ Private\ variables}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00031\ \ \ \ \ int16\_t\ \ \ \ \ \ \ \ \ KP;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Porportional\ gain\ (Kp)}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00037\ \ \ \ \ int16\_t\ \ \ \ \ \ \ \ \ KI;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Integral\ gain\ (Ki)}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ The\ control\ function\ outputs\ the\ required\ duty\ cycle\ stored\ in\ this\ variable.\ The\ duty}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *\ cycle\ can\ then\ be\ sent\ to\ the\ motor\ driver\ object\ to\ set\ the\ new\ pwm}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00044\ \ \ \ \ int16\_t\ \ \ \ \ \ \ \ \ DUTY\_CYCLE;\ \ \ \textcolor{comment}{//\ Duty\ Cycle}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00050\ \ \ \ \ int32\_t\ \ \ \ \ SET\_POINT;\ \textcolor{comment}{//\ Current\ Set\ Point}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00057\ \ \ \ \ int32\_t\ \ \ \ \ CURR\_CNT;\ \ \ \textcolor{comment}{//\ Current\ encoder\ position}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ \ \ \ \ int16\_t\ \ \ \ \ INT\_ERR;\ \textcolor{comment}{//\ integrated\ error}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00071\ \ \ \ \ feedback\_controller(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ prototype\ for\ default\ constructor}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_setpoint(int32\_t\ SET\_POINT);\ \ \textcolor{comment}{//\ prototype\ for\ method\ to\ set\ the\ encoder\ position\ setpoint}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_KP(int16\_t\ KP);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ prototype\ for\ method\ to\ set\ KP}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_KI(int16\_t\ KI);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ prototype\ for\ method\ to\ set\ KI}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00098\ \ \ \ \ int16\_t\ run(int32\_t\ CURR\_CNT);\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ prototype\ for\ method\ to\ return\ duty\ cycle\ for\ given\ current\ encoder\ position}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ INC\_CONTROLLER\_DRIVER\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

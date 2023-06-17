@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "controller_driver.h"
+#include "servo_driver.h"
+#include "encoder_driver.h"
 
 movement_task::movement_task(motor_driver _Left_Mot,
 		motor_driver _Right_Mot,

@@ -15,80 +15,78 @@
 #include <cstdlib>		// allows use of functions like abs() for absolute value
 
 
-// Class Motor Driver used to control the PWM signal for the duty cycle of a DC motor
+//! Class Motor Driver used to control the PWM signal for the duty cycle of a DC motor
+/*!
+ * The motor driver class controls a DC motor by altering the pwm signal sent to the motor driver.
+ * A motor driver object is created simply with a pointer to an pre-initialized timer, and two channels
+ * connected to the motor driver.
+ */
 class motor_driver {
 // Private attributes and functions can only be accessed from within the class
 private:
+	//! Private duty cycle variable
+	/*!
+	 * The duty cycle variable simply contains the duty cycle to be sent to the motor driver. The maximum duty cycle is
+	 * 5000 which corresponds to a 50% duty cycle. Any number above 5000 saturates to 5000 in order to stop the
+	 * robot from moving too quickly.
+	 */
 	int16_t	Duty_Cycle; 	// signed integer from representing the current duty cycle
+
+	//! Private variable for one of the timer channels running the motor
+	/*!
+	 * This variable is a 32 bit unsigned integer and is simply a 1, 2, 3, 4. Care must be taken to connect the motor to
+	 * the correct pins corresponding to these two channels.
+	 */
 	uint32_t ch_a ;			// timer channel for pwm pin 1
+
+	//! Private variable for one of the timer channels running the motor
+	/*!
+	 * This variable is a 32 bit unsigned integer and is simply a 1, 2, 3, 4. Care must be taken to connect the motor to
+	 * the correct pins corresponding to these two channels.
+	 */
 	uint32_t ch_b;			// timer channel for pwm pin 2
+
+	//! Pointer to a pre-initialized timer
+	/*!
+	 * This is a pointer to a specific timer which has been pre-configured for pwm output.
+	 * The timer should be configured with zero prescaler and an auto-reload value of 4899. (or whatever value sets
+	 * the period of the timer to 50 ms)
+	 */
 	TIM_HandleTypeDef* htim;	// timer channel handle
 
 // Public attributes and functions can be used anywhere that has access to
 // the motor driver object
 public:
+
+	//! Prototype for the default constructor
 	motor_driver(void);								// Prototype for default constructor
+
+	//! Motor driver initialization
+	/*!
+	 * Requires an initialized timer, and two corresponding channels used for motor pwm.
+	 */
 	motor_driver(TIM_HandleTypeDef* htim,           // Prototype for initializing constructor
         		uint32_t ch_a,
 				uint32_t ch_b);
+	//! Function to set the motors pwm signal
+	/*!
+	 * This function sets the duty cycle variable to this functions parameter input, Duty_Cycle. This value is then saturated to 5000
+	 * or -5000 if the input value is larger or smaller.
+	 * Then, based on if the set value is positive or negative, one channel is set to generate a pulse of the inputted duty cycle,
+	 * while the other channel is set to low.
+	 */
     void Set_PWM(int16_t	Duty_Cycle);        // Prototype for set pwm method
+
+    //! Function to stop the motor
+    /*!
+     * This function simply stops pwm on the specified timer channels. If this function is used,
+     * the motor cannot be turned on by setting the duty cycle.
+     */
     void Stop_Motor(void);  					// Prototype for disable motor method
 };
 
-// Encoder Reader class used to read  and return current encoder position
-class encoder_reader {
-// Private Variables can be accessed only from within the class
-private:
-	int32_t COUNT;				// Signed integer for the current value of encoder
-	uint32_t prev_value;		// Unsigned integer for the counter value at the previous read time
-	int32_t	DELTA;				// Signed integer for the change in counter value
-	TIM_HandleTypeDef* htim;	// timer channel handle
-
-public:
-	encoder_reader(void);						// prototype for default constructor
-	encoder_reader(TIM_HandleTypeDef* htim);	// prototype for initializing constructor
-	void zero_count(void);						// prototype for method to zero the current encoder value
-	int32_t get_count(void);					// prototype for method to return the current encoder value
-
-};
 
 
-// Feedback controller class implements a closed loop KI controller
-class feedback_controller{
-	// Private variables
-private:
-	int16_t 		KP;			// Porportional gain (Kp)
-	int16_t			KI;			// Integral gain (Ki)
-	int16_t		 	DUTY_CYCLE;	// Duty Cycle
-	int32_t		SET_POINT;	// Current Set Point
-	int32_t		CURR_CNT;	// Current encoder position
-	int16_t		INT_ERR;	// integrated error
-
-public:
-	feedback_controller(void);				// prototype for default constructor
-	void set_setpoint(int32_t SET_POINT);	// prototype for method to set the encoder position setpoint
-	void set_KP(int16_t KP);				// prototype for method to set KP
-	void set_KI(int16_t KI);				// prototype for method to set KI
-	int16_t run(int32_t CURR_CNT);			// prototype for method to return duty cycle for given current encoder position
-
-};
-
-// Class Motor Driver used to control the PWM signal for the duty cycle of a DC motor
-class servo_driver {
-// Private attributes and functions can only be accessed from within the class
-private:
-	int16_t	ANGLE; 				// signed integer from representing the current duty cycle
-	uint32_t channel ;			// timer channel for pwm pin 1
-	TIM_HandleTypeDef* htim;	// timer channel handle
-
-// Public attributes and functions can be used anywhere that has access to
-// the motor driver object
-public:
-	servo_driver(void);								// Prototype for default constructor
-	servo_driver(TIM_HandleTypeDef* htim,           // Prototype for initializing constructor
-        		uint32_t channel);
-    void Set_Position(int16_t	ANGLE);        // Prototype for set pwm method
-};
 
 
 #endif /* INC_MOTOR_DRIVER_H_ */

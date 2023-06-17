@@ -1,0 +1,218 @@
+\doxysection{sort\+\_\+task Class Reference}
+\label{classsort__task}\index{sort\_task@{sort\_task}}
+
+
+Class for sorting picked up balls.  
+
+
+
+
+{\ttfamily \#include $<$sorting\+\_\+task.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{classsort__task_ad80dc3434faad3e89bedb56eb740498e} 
+{\bfseries sort\+\_\+task} (void)
+\begin{DoxyCompactList}\small\item\em Prototype Default constructor. \end{DoxyCompactList}\item 
+\textbf{ sort\+\_\+task} (\textbf{ servo\+\_\+driver} \textbf{ servo}, UART\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ huart}, I2\+C\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ hi2c})
+\begin{DoxyCompactList}\small\item\em Constructor for the task creation. \end{DoxyCompactList}\item 
+void \textbf{ run} (void)
+\begin{DoxyCompactList}\small\item\em Run method to implement the FSM. \end{DoxyCompactList}\item 
+int32\+\_\+t \textbf{ get\+\_\+duty} (void)
+\begin{DoxyCompactList}\small\item\em Function to get the current duty output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef void(sort\+\_\+task\+::$\ast$ \textbf{ state\+\_\+fcn}) (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \textbf{ state\+\_\+0} (void)
+\begin{DoxyCompactList}\small\item\em Internal function for state 0. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+1} (void)
+\begin{DoxyCompactList}\small\item\em Internal function for state 1\+: Read color sensor. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+2} (void)
+\begin{DoxyCompactList}\small\item\em Internal function for state 2\+: Move servo to accept. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+3} (void)
+\begin{DoxyCompactList}\small\item\em Internal function for state 3\+: Move servo to reject. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\label{classsort__task_a9cce80601ba8a36094b7a8f51f135dfe} 
+uint32\+\_\+t {\bfseries state}
+\begin{DoxyCompactList}\small\item\em Current state. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ runs}
+\begin{DoxyCompactList}\small\item\em Private Variable for number of times the task has ran. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ num\+\_\+states}
+\begin{DoxyCompactList}\small\item\em Private variable for the number of states in the FSM. \end{DoxyCompactList}\item 
+\textbf{ state\+\_\+fcn} $\ast$ \textbf{ state\+\_\+list}
+\begin{DoxyCompactList}\small\item\em Pointer to a list of all states. \end{DoxyCompactList}\item 
+\textbf{ servo\+\_\+driver} \textbf{ servo}
+\begin{DoxyCompactList}\small\item\em Servo object passed into the task object. \end{DoxyCompactList}\item 
+\label{classsort__task_a579d4a19c7c9c5a686b2c8763beffad1} 
+UART\+\_\+\+Handle\+Type\+Def $\ast$ {\bfseries huart}
+\begin{DoxyCompactList}\small\item\em Pre configured Uart channel for debugging. \end{DoxyCompactList}\item 
+\label{classsort__task_a419454e89ed7037f0bb430ef654b0321} 
+int16\+\_\+t {\bfseries servo\+\_\+angle}
+\begin{DoxyCompactList}\small\item\em Private variable corresponding to the servo set angle. \end{DoxyCompactList}\item 
+\label{classsort__task_af1246f0aaaa594c2d93ea1581dba0232} 
+uint32\+\_\+t {\bfseries start\+\_\+ticks}
+\begin{DoxyCompactList}\small\item\em Private variable for the start time for each state. \end{DoxyCompactList}\item 
+\label{classsort__task_ae89168a99c0025ac53340cb5786b9af3} 
+uint32\+\_\+t {\bfseries curr\+\_\+time}
+\begin{DoxyCompactList}\small\item\em Private variable for the current time in the state. \end{DoxyCompactList}\item 
+\label{classsort__task_acbc36a1dbef862f0ecd9e3c682c357cd} 
+uint16\+\_\+t {\bfseries start\+\_\+count}
+\item 
+\label{classsort__task_a76ef8ee49bba6fb19d31c7fe8b8b65db} 
+I2\+C\+\_\+\+Handle\+Type\+Def $\ast$ {\bfseries hi2c}
+\begin{DoxyCompactList}\small\item\em Pre-\/\+Initialized I2C pointer for RGB sensor communication. \end{DoxyCompactList}\item 
+\label{classsort__task_a78cd1ba791123e20baaebf0f4168f5bc} 
+uint16\+\_\+t {\bfseries red\+\_\+val}
+\begin{DoxyCompactList}\small\item\em Private variables for the red, green, and blue color sensor data. \end{DoxyCompactList}\item 
+\label{classsort__task_a5e73e971c454c11b54243bff6c71fd0c} 
+uint16\+\_\+t {\bfseries green\+\_\+val}
+\item 
+\label{classsort__task_a6f19c8096a04c44b7d6a4e9c8949ba1f} 
+uint16\+\_\+t {\bfseries blue\+\_\+val}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for sorting picked up balls. 
+
+This class is used to implement the finite state machine for sorting ping-\/pong balls based on their color. This FSM has 4 states\+: state 0 initialization, state 1 get color sensor output, state 2 rotate servo motor 90 degrees. to the left if the ball is the correct color, state 3 move the servo motor to the right 90 degrees if the ball is the wrong color. 
+
+\doxysubsection{Member Typedef Documentation}
+\label{classsort__task_a375931da01f06635b62413c0f3da7a41} 
+\index{sort\_task@{sort\_task}!state\_fcn@{state\_fcn}}
+\index{state\_fcn@{state\_fcn}!sort\_task@{sort\_task}}
+\doxysubsubsection{state\_fcn}
+{\footnotesize\ttfamily typedef void(sort\+\_\+task\+::$\ast$ sort\+\_\+task\+::state\+\_\+fcn) (void)\hspace{0.3cm}{\ttfamily [private]}}
+
+This function is used to call the required state function. It works by taking in the current state and calling the specific function corresponding to that state. The list of states and corresponding functions is kept in a struct that the function accesses. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{classsort__task_a6ce60bdb311d2478d54fd074e9c231b2} 
+\index{sort\_task@{sort\_task}!sort\_task@{sort\_task}}
+\index{sort\_task@{sort\_task}!sort\_task@{sort\_task}}
+\doxysubsubsection{sort\_task()}
+{\footnotesize\ttfamily sort\+\_\+task\+::sort\+\_\+task (\begin{DoxyParamCaption}\item[{\textbf{ servo\+\_\+driver}}]{servo,  }\item[{UART\+\_\+\+Handle\+Type\+Def $\ast$}]{huart,  }\item[{I2\+C\+\_\+\+Handle\+Type\+Def $\ast$}]{hi2c }\end{DoxyParamCaption})}
+
+
+
+Constructor for the task creation. 
+
+Only contains pre constructed object and configured objects 
+
+\doxysubsection{Member Function Documentation}
+\label{classsort__task_a5c4c1d1bb9f2df5c62718b1087d7503c} 
+\index{sort\_task@{sort\_task}!get\_duty@{get\_duty}}
+\index{get\_duty@{get\_duty}!sort\_task@{sort\_task}}
+\doxysubsubsection{get\_duty()}
+{\footnotesize\ttfamily int32\+\_\+t sort\+\_\+task\+::get\+\_\+duty (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to get the current duty output. 
+
+This function is used to verify the pwm output before implementing it with the servo motor. \label{classsort__task_a162955f8c7e5f3677897d6d4b1605b0c} 
+\index{sort\_task@{sort\_task}!run@{run}}
+\index{run@{run}!sort\_task@{sort\_task}}
+\doxysubsubsection{run()}
+{\footnotesize\ttfamily void sort\+\_\+task\+::run (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Run method to implement the FSM. 
+
+The run method uses the state variable to call the respective function using the state\+\_\+fcn function. \label{classsort__task_a5b743f8b6e115d85ffe39ab938cc0d4c} 
+\index{sort\_task@{sort\_task}!state\_0@{state\_0}}
+\index{state\_0@{state\_0}!sort\_task@{sort\_task}}
+\doxysubsubsection{state\_0()}
+{\footnotesize\ttfamily void sort\+\_\+task\+::state\+\_\+0 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Internal function for state 0. 
+
+Initialization state. In this state the I2C bus is initialized and set up for communication with the RGB color sensor. \label{classsort__task_a4ea5cbb0013cb3cb2f53e43b230af181} 
+\index{sort\_task@{sort\_task}!state\_1@{state\_1}}
+\index{state\_1@{state\_1}!sort\_task@{sort\_task}}
+\doxysubsubsection{state\_1()}
+{\footnotesize\ttfamily void sort\+\_\+task\+::state\+\_\+1 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Internal function for state 1\+: Read color sensor. 
+
+In state one the color sensor reading is updated by reading from the specific register using the inputed I2C bus. This outputs the red green and white values. These values are then compared to a standard value corresponding to a red ball. If the values are not close enough to the desired value, set state to state 3. If the read values are close to the set value, set state to 2. \label{classsort__task_aa05dca36ddad9c110b0d24836c292fd1} 
+\index{sort\_task@{sort\_task}!state\_2@{state\_2}}
+\index{state\_2@{state\_2}!sort\_task@{sort\_task}}
+\doxysubsubsection{state\_2()}
+{\footnotesize\ttfamily void sort\+\_\+task\+::state\+\_\+2 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Internal function for state 2\+: Move servo to accept. 
+
+This state sets the servo to move to 90 degrees by using the passed through servo object\textquotesingle{}s set position method. \label{classsort__task_a230efc9b6440f5d90fa93e9d34c14926} 
+\index{sort\_task@{sort\_task}!state\_3@{state\_3}}
+\index{state\_3@{state\_3}!sort\_task@{sort\_task}}
+\doxysubsubsection{state\_3()}
+{\footnotesize\ttfamily void sort\+\_\+task\+::state\+\_\+3 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Internal function for state 3\+: Move servo to reject. 
+
+This state sets the servo to move to 90 degrees by using the passed through object\textquotesingle{}s set position method. 
+
+\doxysubsection{Member Data Documentation}
+\label{classsort__task_a2bcd7fd8f7822dde044e46bf58ef3d51} 
+\index{sort\_task@{sort\_task}!num\_states@{num\_states}}
+\index{num\_states@{num\_states}!sort\_task@{sort\_task}}
+\doxysubsubsection{num\_states}
+{\footnotesize\ttfamily uint32\+\_\+t sort\+\_\+task\+::num\+\_\+states\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for the number of states in the FSM. 
+
+Initialized to 4. Used to set the size of the struct containing each state function. \label{classsort__task_a0ff86545dec9c604d0c2c0e045cfedf4} 
+\index{sort\_task@{sort\_task}!runs@{runs}}
+\index{runs@{runs}!sort\_task@{sort\_task}}
+\doxysubsubsection{runs}
+{\footnotesize\ttfamily uint32\+\_\+t sort\+\_\+task\+::runs\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private Variable for number of times the task has ran. 
+
+This variable is incremented every time the task is ran. \label{classsort__task_aa621d47e0c24c7675d06cea901351411} 
+\index{sort\_task@{sort\_task}!servo@{servo}}
+\index{servo@{servo}!sort\_task@{sort\_task}}
+\doxysubsubsection{servo}
+{\footnotesize\ttfamily \textbf{ servo\+\_\+driver} sort\+\_\+task\+::servo\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Servo object passed into the task object. 
+
+The servo is used to put the balls in the correct location \label{classsort__task_a50ee1e194b5ba79a1b6b43ba0715b9cb} 
+\index{sort\_task@{sort\_task}!state\_list@{state\_list}}
+\index{state\_list@{state\_list}!sort\_task@{sort\_task}}
+\doxysubsubsection{state\_list}
+{\footnotesize\ttfamily \textbf{ state\+\_\+fcn}$\ast$ sort\+\_\+task\+::state\+\_\+list\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to a list of all states. 
+
+This is used in the state\+\_\+fcn function to list the states and the corresponding function 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sorting\+\_\+task.\+h\end{DoxyCompactItemize}

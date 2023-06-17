@@ -1,0 +1,123 @@
+\doxysection{motor\+\_\+driver Class Reference}
+\label{classmotor__driver}\index{motor\_driver@{motor\_driver}}
+
+
+Class Motor Driver used to control the PWM signal for the duty cycle of a DC motor.  
+
+
+
+
+{\ttfamily \#include $<$motor\+\_\+driver.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{classmotor__driver_a7700e90cf653e5b4c0b3b05188465d1d} 
+{\bfseries motor\+\_\+driver} (void)
+\begin{DoxyCompactList}\small\item\em Prototype for the default constructor. \end{DoxyCompactList}\item 
+\textbf{ motor\+\_\+driver} (TIM\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ htim}, uint32\+\_\+t \textbf{ ch\+\_\+a}, uint32\+\_\+t \textbf{ ch\+\_\+b})
+\begin{DoxyCompactList}\small\item\em Motor driver initialization. \end{DoxyCompactList}\item 
+void \textbf{ Set\+\_\+\+PWM} (int16\+\_\+t \textbf{ Duty\+\_\+\+Cycle})
+\begin{DoxyCompactList}\small\item\em Function to set the motors pwm signal. \end{DoxyCompactList}\item 
+void \textbf{ Stop\+\_\+\+Motor} (void)
+\begin{DoxyCompactList}\small\item\em Function to stop the motor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int16\+\_\+t \textbf{ Duty\+\_\+\+Cycle}
+\begin{DoxyCompactList}\small\item\em Private duty cycle variable. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ ch\+\_\+a}
+\begin{DoxyCompactList}\small\item\em Private variable for one of the timer channels running the motor. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ ch\+\_\+b}
+\begin{DoxyCompactList}\small\item\em Private variable for one of the timer channels running the motor. \end{DoxyCompactList}\item 
+TIM\+\_\+\+Handle\+Type\+Def $\ast$ \textbf{ htim}
+\begin{DoxyCompactList}\small\item\em Pointer to a pre-\/initialized timer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class Motor Driver used to control the PWM signal for the duty cycle of a DC motor. 
+
+The motor driver class controls a DC motor by altering the pwm signal sent to the motor driver. A motor driver object is created simply with a pointer to an pre-\/initialized timer, and two channels connected to the motor driver. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{classmotor__driver_a29996d57a2e4389da9dd0f915e684b67} 
+\index{motor\_driver@{motor\_driver}!motor\_driver@{motor\_driver}}
+\index{motor\_driver@{motor\_driver}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{motor\_driver()}
+{\footnotesize\ttfamily motor\+\_\+driver\+::motor\+\_\+driver (\begin{DoxyParamCaption}\item[{TIM\+\_\+\+Handle\+Type\+Def $\ast$}]{htim,  }\item[{uint32\+\_\+t}]{ch\+\_\+a,  }\item[{uint32\+\_\+t}]{ch\+\_\+b }\end{DoxyParamCaption})}
+
+
+
+Motor driver initialization. 
+
+Requires an initialized timer, and two corresponding channels used for motor pwm. 
+
+\doxysubsection{Member Function Documentation}
+\label{classmotor__driver_aaf0b9d511b997538d01774421c465874} 
+\index{motor\_driver@{motor\_driver}!Set\_PWM@{Set\_PWM}}
+\index{Set\_PWM@{Set\_PWM}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{Set\_PWM()}
+{\footnotesize\ttfamily void motor\+\_\+driver\+::\+Set\+\_\+\+PWM (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{Duty\+\_\+\+Cycle }\end{DoxyParamCaption})}
+
+
+
+Function to set the motors pwm signal. 
+
+This function sets the duty cycle variable to this functions parameter input, Duty\+\_\+\+Cycle. This value is then saturated to 5000 or -\/5000 if the input value is larger or smaller. Then, based on if the set value is positive or negative, one channel is set to generate a pulse of the inputted duty cycle, while the other channel is set to low. \label{classmotor__driver_a6a12d4e072ac4d7622760c9e55daf799} 
+\index{motor\_driver@{motor\_driver}!Stop\_Motor@{Stop\_Motor}}
+\index{Stop\_Motor@{Stop\_Motor}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{Stop\_Motor()}
+{\footnotesize\ttfamily void motor\+\_\+driver\+::\+Stop\+\_\+\+Motor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to stop the motor. 
+
+This function simply stops pwm on the specified timer channels. If this function is used, the motor cannot be turned on by setting the duty cycle. 
+
+\doxysubsection{Member Data Documentation}
+\label{classmotor__driver_aa65ce5f6ab6c79f3dad8a7d9d91ebe0e} 
+\index{motor\_driver@{motor\_driver}!ch\_a@{ch\_a}}
+\index{ch\_a@{ch\_a}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{ch\_a}
+{\footnotesize\ttfamily uint32\+\_\+t motor\+\_\+driver\+::ch\+\_\+a\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for one of the timer channels running the motor. 
+
+This variable is a 32 bit unsigned integer and is simply a 1, 2, 3, 4. Care must be taken to connect the motor to the correct pins corresponding to these two channels. \label{classmotor__driver_a49152ec9825370ec8e3fd43ba3aee516} 
+\index{motor\_driver@{motor\_driver}!ch\_b@{ch\_b}}
+\index{ch\_b@{ch\_b}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{ch\_b}
+{\footnotesize\ttfamily uint32\+\_\+t motor\+\_\+driver\+::ch\+\_\+b\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for one of the timer channels running the motor. 
+
+This variable is a 32 bit unsigned integer and is simply a 1, 2, 3, 4. Care must be taken to connect the motor to the correct pins corresponding to these two channels. \label{classmotor__driver_a1a26dd0e7160a475af108df77c0d8a94} 
+\index{motor\_driver@{motor\_driver}!Duty\_Cycle@{Duty\_Cycle}}
+\index{Duty\_Cycle@{Duty\_Cycle}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{Duty\_Cycle}
+{\footnotesize\ttfamily int16\+\_\+t motor\+\_\+driver\+::\+Duty\+\_\+\+Cycle\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private duty cycle variable. 
+
+The duty cycle variable simply contains the duty cycle to be sent to the motor driver. The maximum duty cycle is 5000 which corresponds to a 50\% duty cycle. Any number above 5000 saturates to 5000 in order to stop the robot from moving too quickly. \label{classmotor__driver_ade5b3fd1bfac84661e20659656feb4ba} 
+\index{motor\_driver@{motor\_driver}!htim@{htim}}
+\index{htim@{htim}!motor\_driver@{motor\_driver}}
+\doxysubsubsection{htim}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def$\ast$ motor\+\_\+driver\+::htim\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to a pre-\/initialized timer. 
+
+This is a pointer to a specific timer which has been pre-\/configured for pwm output. The timer should be configured with zero prescaler and an auto-\/reload value of 4899. (or whatever value sets the period of the timer to 50 ms) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+motor\+\_\+driver.\+h\end{DoxyCompactItemize}

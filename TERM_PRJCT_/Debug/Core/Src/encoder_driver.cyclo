@@ -1,0 +1,4 @@
+encoder_driver.cpp:16:1:encoder_reader::encoder_reader()	1
+encoder_driver.cpp:22:1:encoder_reader::encoder_reader(TIM_HandleTypeDef*)	1
+encoder_driver.cpp:36:6:void encoder_reader::zero_count()	1
+encoder_driver.cpp:44:9:int32_t encoder_reader::get_count()	3

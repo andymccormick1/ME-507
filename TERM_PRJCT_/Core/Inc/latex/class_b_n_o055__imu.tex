@@ -1,0 +1,207 @@
+\doxysection{BNO055\+\_\+imu Class Reference}
+\label{class_b_n_o055__imu}\index{BNO055\_imu@{BNO055\_imu}}
+
+
+A Class for the Use of the Adafruit BNO055 IMU.  
+
+
+
+
+{\ttfamily \#include $<$BNO055.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{class_b_n_o055__imu_a0cd83d651504d45fcf521a47481da407} 
+{\bfseries BNO055\+\_\+imu} (void)
+\begin{DoxyCompactList}\small\item\em Initialization. \end{DoxyCompactList}\item 
+\textbf{ BNO055\+\_\+imu} (I2\+C\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ hi2c})
+\begin{DoxyCompactList}\small\item\em IMU initialization function. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ get\+\_\+heading} (void)
+\begin{DoxyCompactList}\small\item\em returns the current heading in degrees. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ calibrate} (void)
+\begin{DoxyCompactList}\small\item\em Function to calibrate the IMU. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ get\+\_\+calibration} (void)
+\begin{DoxyCompactList}\small\item\em Function to get the current calibration status. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ get\+\_\+state} (void)
+\begin{DoxyCompactList}\small\item\em Function to obtain the IMU state. \end{DoxyCompactList}\item 
+void \textbf{ zero\+\_\+heading} (void)
+\begin{DoxyCompactList}\small\item\em Function zero the heading. \end{DoxyCompactList}\item 
+uint16\+\_\+t \textbf{ update\+\_\+heading} (void)
+\begin{DoxyCompactList}\small\item\em Function to update and return the current heading. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \textbf{ calib\+\_\+buffer} [1]
+\begin{DoxyCompactList}\small\item\em A Buffer for the calibration data. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ cur\+\_\+calib}
+\begin{DoxyCompactList}\small\item\em Private variable for the actual calibration. \end{DoxyCompactList}\item 
+uint16\+\_\+t \textbf{ cur\+\_\+heading}
+\begin{DoxyCompactList}\small\item\em Private variable for the current heading. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ heading\+\_\+deg}
+\begin{DoxyCompactList}\small\item\em A private variable for the current heading in degrees. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ heading\+\_\+buffer} [2]
+\begin{DoxyCompactList}\small\item\em A 2 byte Buffer for the heading data. \end{DoxyCompactList}\item 
+uint8\+\_\+t \textbf{ state}
+\begin{DoxyCompactList}\small\item\em A private variable describing the state of the imu. \end{DoxyCompactList}\item 
+I2\+C\+\_\+\+Handle\+Type\+Def $\ast$ \textbf{ hi2c}
+\begin{DoxyCompactList}\small\item\em A Pointer to the I2C bus used for communication. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A Class for the Use of the Adafruit BNO055 IMU. 
+
+The BNO0855\+\_\+imu class is used to communicate with the adafruit BNO055 imu over the I2C bus. This calss specifically obtains the heading value from the specific register on the imu. Although there are many additional measurements held on the imu, the heading is the only one accessed because it is the only measurement needed. Other measurements can easily be obtained by reading other registers. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{class_b_n_o055__imu_a59d348e59839d2bb413ff0be97e9d456} 
+\index{BNO055\_imu@{BNO055\_imu}!BNO055\_imu@{BNO055\_imu}}
+\index{BNO055\_imu@{BNO055\_imu}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{BNO055\_imu()}
+{\footnotesize\ttfamily BNO055\+\_\+imu\+::\+BNO055\+\_\+imu (\begin{DoxyParamCaption}\item[{I2\+C\+\_\+\+Handle\+Type\+Def $\ast$}]{hi2c }\end{DoxyParamCaption})}
+
+
+
+IMU initialization function. 
+
+Takes an input of the pre-\/initizalized I2C bus. This function configures the IMU in IMU mode in order to allow fusion of data outputs. This also verifies the I2C bus is working and can communicate with the IMU. Additionally, the initialization hecks for sensor calibration before moving on, but has been removed due to implementation difficulties. 
+
+\doxysubsection{Member Function Documentation}
+\label{class_b_n_o055__imu_a623d4395f32b73732dea9f487c9d2c41} 
+\index{BNO055\_imu@{BNO055\_imu}!calibrate@{calibrate}}
+\index{calibrate@{calibrate}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{calibrate()}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::calibrate (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to calibrate the IMU. 
+
+This function can be used to verify the IMU is calibrated. It returns the value of the calibration register. It also et stuck in a while loop and outputs the error if the IMU is not calibrated. This should be used sparingly as it can stop the rest of the code from running. \label{class_b_n_o055__imu_a018c7d80e786323770b805e261910bdd} 
+\index{BNO055\_imu@{BNO055\_imu}!get\_calibration@{get\_calibration}}
+\index{get\_calibration@{get\_calibration}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{get\_calibration()}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::get\+\_\+calibration (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to get the current calibration status. 
+
+This function purely returns the calibration status and nothing else. Can be used to verify the device is ready to output data. \label{class_b_n_o055__imu_aff8e4cf02f513ee86223c2390c16e5d9} 
+\index{BNO055\_imu@{BNO055\_imu}!get\_heading@{get\_heading}}
+\index{get\_heading@{get\_heading}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{get\_heading()}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::get\+\_\+heading (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+returns the current heading in degrees. 
+
+This function does not update the heading, it merely returns the current value stored. This is not the msot useful function. \label{class_b_n_o055__imu_ab73f484c7b2beb44ab8103e04759d126} 
+\index{BNO055\_imu@{BNO055\_imu}!get\_state@{get\_state}}
+\index{get\_state@{get\_state}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{get\_state()}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::get\+\_\+state (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to obtain the IMU state. 
+
+This function was used to debug the I2C bus. A state of 0 means the IMU is not communicating while a state of 1 means the IMU is communicating. \label{class_b_n_o055__imu_a1acc623c87bec819b890346c5540acc1} 
+\index{BNO055\_imu@{BNO055\_imu}!update\_heading@{update\_heading}}
+\index{update\_heading@{update\_heading}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{update\_heading()}
+{\footnotesize\ttfamily uint16\+\_\+t BNO055\+\_\+imu\+::update\+\_\+heading (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to update and return the current heading. 
+
+This function reads the Heading register and puts the 2 bytes in the heading buffer. The 2 bytes are then put in the 16 bit heading file by shifting the MSB to the left by 8 and oring that value with the LSB. This final value is then divided by 16 to return the heading value in degrees. \label{class_b_n_o055__imu_a38ef236922f7aa374e35ff409956c058} 
+\index{BNO055\_imu@{BNO055\_imu}!zero\_heading@{zero\_heading}}
+\index{zero\_heading@{zero\_heading}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{zero\_heading()}
+{\footnotesize\ttfamily void BNO055\+\_\+imu\+::zero\+\_\+heading (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function zero the heading. 
+
+This function is used to set a heading datum of heading equal to zero. This can be useful to set the devices home. 
+
+\doxysubsection{Member Data Documentation}
+\label{class_b_n_o055__imu_a4544fa53c54be2e421c26a3bd797c9c8} 
+\index{BNO055\_imu@{BNO055\_imu}!calib\_buffer@{calib\_buffer}}
+\index{calib\_buffer@{calib\_buffer}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{calib\_buffer}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::calib\+\_\+buffer[1]\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A Buffer for the calibration data. 
+
+The calibration data is stored in the register with address 0x35. When this register is read in the setup method, the current value is out in this buffer. \label{class_b_n_o055__imu_af24c7888f89361edf13efcc7ffeac2b9} 
+\index{BNO055\_imu@{BNO055\_imu}!cur\_calib@{cur\_calib}}
+\index{cur\_calib@{cur\_calib}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{cur\_calib}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::cur\+\_\+calib\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for the actual calibration. 
+
+Data from the buffer is transferred to this variable for easy access. \label{class_b_n_o055__imu_ab7d39e5085edf08d0fc4cea7f0672ce1} 
+\index{BNO055\_imu@{BNO055\_imu}!cur\_heading@{cur\_heading}}
+\index{cur\_heading@{cur\_heading}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{cur\_heading}
+{\footnotesize\ttfamily uint16\+\_\+t BNO055\+\_\+imu\+::cur\+\_\+heading\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for the current heading. 
+
+Data from the heading buffer is transferred to this variable as 16 bits for easy access and manipulation. \label{class_b_n_o055__imu_a53e29fcad49ed39db4952aaf696708f1} 
+\index{BNO055\_imu@{BNO055\_imu}!heading\_buffer@{heading\_buffer}}
+\index{heading\_buffer@{heading\_buffer}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{heading\_buffer}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::heading\+\_\+buffer[2]\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A 2 byte Buffer for the heading data. 
+
+Data is read from the heading register on the imu at address 0x1E. The 2 bytes (16 bits) are stored temporarily in the buffer. \label{class_b_n_o055__imu_ad2acc64738d110b992736e66d7071a3a} 
+\index{BNO055\_imu@{BNO055\_imu}!heading\_deg@{heading\_deg}}
+\index{heading\_deg@{heading\_deg}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{heading\_deg}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::heading\+\_\+deg\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A private variable for the current heading in degrees. 
+
+The number stored in the cur\+\_\+heading variable is converted to degrees and stored in this variable. \label{class_b_n_o055__imu_a0457ceb18364455d7e6c0196d08aa037} 
+\index{BNO055\_imu@{BNO055\_imu}!hi2c@{hi2c}}
+\index{hi2c@{hi2c}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{hi2c}
+{\footnotesize\ttfamily I2\+C\+\_\+\+Handle\+Type\+Def$\ast$ BNO055\+\_\+imu\+::hi2c\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A Pointer to the I2C bus used for communication. 
+
+The I2C bus must be initialized and configured in the main file before the IMU object is created. The I2C bus should be running no faster than 400 k\+Hz, and all pins should be pulled up, preferably by external pull up resistors. \label{class_b_n_o055__imu_a81ece916023845633429797a356c2bd5} 
+\index{BNO055\_imu@{BNO055\_imu}!state@{state}}
+\index{state@{state}!BNO055\_imu@{BNO055\_imu}}
+\doxysubsubsection{state}
+{\footnotesize\ttfamily uint8\+\_\+t BNO055\+\_\+imu\+::state\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A private variable describing the state of the imu. 
+
+The state is initialized as 0. Once communication has been established, the state changes to one. If communication is not established the program will be stuck in a while loop and print over uart the issue. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+BNO055.\+h\end{DoxyCompactItemize}

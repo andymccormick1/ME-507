@@ -1,0 +1,60 @@
+\doxysection{motor\+\_\+driver.\+h}
+\label{motor__driver_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ motor\_driver.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ May\ 1,\ 2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ caleb\ erlenborn}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ INC\_MOTOR\_DRIVER\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ INC\_MOTOR\_DRIVER\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}stm32f4xx\_hal.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdint.h>}\ \ \ \ \ \textcolor{comment}{//\ Allows\ use\ of\ standard\ integers}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <string.h>}\ \ \ \ \ \textcolor{comment}{//\ Allows\ use\ of\ string\ ops\ like\ strcpy}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <cstdlib>}\ \ \ \ \ \ \textcolor{comment}{//\ allows\ use\ of\ functions\ like\ abs()\ for\ absolute\ value}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }motor\_driver\ \{}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ Private\ attributes\ and\ functions\ can\ only\ be\ accessed\ from\ within\ the\ class}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00033\ \ \ \ \ int16\_t\ Duty\_Cycle;\ \ \ \textcolor{comment}{//\ signed\ integer\ from\ representing\ the\ current\ duty\ cycle}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00040\ \ \ \ \ uint32\_t\ ch\_a\ ;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ timer\ channel\ for\ pwm\ pin\ 1}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00047\ \ \ \ \ uint32\_t\ ch\_b;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ timer\ channel\ for\ pwm\ pin\ 2}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00055\ \ \ \ \ TIM\_HandleTypeDef*\ htim;\ \ \ \ \textcolor{comment}{//\ timer\ channel\ handle}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{//\ Public\ attributes\ and\ functions\ can\ be\ used\ anywhere\ that\ has\ access\ to}}
+\DoxyCodeLine{00058\ \textcolor{comment}{//\ the\ motor\ driver\ object}}
+\DoxyCodeLine{00059\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00062\ \ \ \ \ motor\_driver(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prototype\ for\ default\ constructor}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00068\ \ \ \ \ motor\_driver(TIM\_HandleTypeDef*\ htim,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prototype\ for\ initializing\ constructor}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ch\_a,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ch\_b);}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ Set\_PWM(int16\_t\ Duty\_Cycle);\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prototype\ for\ set\ pwm\ method}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ Stop\_Motor(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prototype\ for\ disable\ motor\ method}}
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ INC\_MOTOR\_DRIVER\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

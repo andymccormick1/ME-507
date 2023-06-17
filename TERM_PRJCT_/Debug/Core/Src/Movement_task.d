@@ -31,7 +31,10 @@ Core/Src/Movement_task.o: ../Core/Src/Movement_task.cpp \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/BNO055.h ../Core/Inc/motor_driver.h \
- ../Core/Inc/motor_driver.h ../Core/Inc/BNO055.h ../Core/Inc/main.h
+ ../Core/Inc/controller_driver.h ../Core/Inc/servo_driver.h \
+ ../Core/Inc/encoder_driver.h ../Core/Inc/motor_driver.h \
+ ../Core/Inc/BNO055.h ../Core/Inc/main.h ../Core/Inc/controller_driver.h \
+ ../Core/Inc/servo_driver.h ../Core/Inc/encoder_driver.h
 ../Core/Inc/movement_task.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -65,6 +68,12 @@ Core/Src/Movement_task.o: ../Core/Src/Movement_task.cpp \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Core/Inc/BNO055.h:
 ../Core/Inc/motor_driver.h:
+../Core/Inc/controller_driver.h:
+../Core/Inc/servo_driver.h:
+../Core/Inc/encoder_driver.h:
 ../Core/Inc/motor_driver.h:
 ../Core/Inc/BNO055.h:
 ../Core/Inc/main.h:
+../Core/Inc/controller_driver.h:
+../Core/Inc/servo_driver.h:
+../Core/Inc/encoder_driver.h:

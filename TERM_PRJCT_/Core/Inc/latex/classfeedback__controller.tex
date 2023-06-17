@@ -1,0 +1,159 @@
+\doxysection{feedback\+\_\+controller Class Reference}
+\label{classfeedback__controller}\index{feedback\_controller@{feedback\_controller}}
+
+
+Feedback controller class implements a closed loop KI controller.  
+
+
+
+
+{\ttfamily \#include $<$controller\+\_\+driver.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ feedback\+\_\+controller} (void)
+\begin{DoxyCompactList}\small\item\em Constructor for the controller object. \end{DoxyCompactList}\item 
+void \textbf{ set\+\_\+setpoint} (int32\+\_\+t \textbf{ SET\+\_\+\+POINT})
+\begin{DoxyCompactList}\small\item\em Function to set the set point. \end{DoxyCompactList}\item 
+void \textbf{ set\+\_\+\+KP} (int16\+\_\+t \textbf{ KP})
+\begin{DoxyCompactList}\small\item\em Function to set the Kp gain value. \end{DoxyCompactList}\item 
+void \textbf{ set\+\_\+\+KI} (int16\+\_\+t \textbf{ KI})
+\begin{DoxyCompactList}\small\item\em Function to set the Ki integral gain. \end{DoxyCompactList}\item 
+int16\+\_\+t \textbf{ run} (int32\+\_\+t \textbf{ CURR\+\_\+\+CNT})
+\begin{DoxyCompactList}\small\item\em Function to run the controller. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int16\+\_\+t \textbf{ KP}
+\begin{DoxyCompactList}\small\item\em Private variable corresponding to the proportional gain constant. \end{DoxyCompactList}\item 
+int16\+\_\+t \textbf{ KI}
+\begin{DoxyCompactList}\small\item\em Private variable corresponding to the integral control constant. \end{DoxyCompactList}\item 
+\label{classfeedback__controller_a671c5cf9b34cf52b71146ede426fde00} 
+int16\+\_\+t {\bfseries DUTY\+\_\+\+CYCLE}
+\begin{DoxyCompactList}\small\item\em Private variable for the required motor duty cycle. \end{DoxyCompactList}\item 
+int32\+\_\+t \textbf{ SET\+\_\+\+POINT}
+\begin{DoxyCompactList}\small\item\em Private variable corresponding to the user defined set point. \end{DoxyCompactList}\item 
+int32\+\_\+t \textbf{ CURR\+\_\+\+CNT}
+\begin{DoxyCompactList}\small\item\em Private Variable for the current encoder value. \end{DoxyCompactList}\item 
+int16\+\_\+t \textbf{ INT\+\_\+\+ERR}
+\begin{DoxyCompactList}\small\item\em Private Variable for the accumulated Integral Error. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Feedback controller class implements a closed loop KI controller. 
+
+The feedback controller class simply provide Proportional and integral control to any system with accessible data. The construction of these objects needs a timer and relevant channel. Usage requires the user to input a set point and provide the current \"{}position.\"{} The control algorithm then computes the error between the set point and current position. The error is then scaled by the Kp value and integrated over time base on the Ki value. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{classfeedback__controller_a883b5c40b59899e7c5b5707c8130ecff} 
+\index{feedback\_controller@{feedback\_controller}!feedback\_controller@{feedback\_controller}}
+\index{feedback\_controller@{feedback\_controller}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{feedback\_controller()}
+{\footnotesize\ttfamily feedback\+\_\+controller\+::feedback\+\_\+controller (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Constructor for the controller object. 
+
+The controller object requires no parameters for construction. It is initialized without setting a set point. 
+
+\doxysubsection{Member Function Documentation}
+\label{classfeedback__controller_ab6455b564d636703045df862ccf34470} 
+\index{feedback\_controller@{feedback\_controller}!run@{run}}
+\index{run@{run}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{run()}
+{\footnotesize\ttfamily int16\+\_\+t feedback\+\_\+controller\+::run (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{CURR\+\_\+\+CNT }\end{DoxyParamCaption})}
+
+
+
+Function to run the controller. 
+
+When calling this function, the controller runs. If the Ki, Kp, and setpoint values have not been set, the controller will run with 0 values set. The function takes in the current encoder value to compare to set point. The encoder value would be obtained by reading the encoder using an encoder object. \label{classfeedback__controller_a188861f84c2add0d9d225eb250f106eb} 
+\index{feedback\_controller@{feedback\_controller}!set\_KI@{set\_KI}}
+\index{set\_KI@{set\_KI}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{set\_KI()}
+{\footnotesize\ttfamily void feedback\+\_\+controller\+::set\+\_\+\+KI (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{KI }\end{DoxyParamCaption})}
+
+
+
+Function to set the Ki integral gain. 
+
+Sets the Ki private variable to the input argument. Ki is initialized as 0. \label{classfeedback__controller_a2b8f3d97dd4f9245193513bfd79c73fe} 
+\index{feedback\_controller@{feedback\_controller}!set\_KP@{set\_KP}}
+\index{set\_KP@{set\_KP}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{set\_KP()}
+{\footnotesize\ttfamily void feedback\+\_\+controller\+::set\+\_\+\+KP (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{KP }\end{DoxyParamCaption})}
+
+
+
+Function to set the Kp gain value. 
+
+Sets the Kp private variable to the input argument. Kp is initialized as 0. \label{classfeedback__controller_a15c4aae915188e52a06520582fbebfde} 
+\index{feedback\_controller@{feedback\_controller}!set\_setpoint@{set\_setpoint}}
+\index{set\_setpoint@{set\_setpoint}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{set\_setpoint()}
+{\footnotesize\ttfamily void feedback\+\_\+controller\+::set\+\_\+setpoint (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{SET\+\_\+\+POINT }\end{DoxyParamCaption})}
+
+
+
+Function to set the set point. 
+
+Calling this function puts the data in the input parameter, SET\+\_\+\+POINT, in the set point private variable. 
+
+\doxysubsection{Member Data Documentation}
+\label{classfeedback__controller_ab24a24f233a709a49791379d558057b8} 
+\index{feedback\_controller@{feedback\_controller}!CURR\_CNT@{CURR\_CNT}}
+\index{CURR\_CNT@{CURR\_CNT}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{CURR\_CNT}
+{\footnotesize\ttfamily int32\+\_\+t feedback\+\_\+controller\+::\+CURR\+\_\+\+CNT\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private Variable for the current encoder value. 
+
+The current count is compared to the set point to compute the error. This value is obtained by using an encoder object to get the current count and pass that vaue into the controller object. \label{classfeedback__controller_ad1148a7294544336a6de4d357668e5ea} 
+\index{feedback\_controller@{feedback\_controller}!INT\_ERR@{INT\_ERR}}
+\index{INT\_ERR@{INT\_ERR}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{INT\_ERR}
+{\footnotesize\ttfamily int16\+\_\+t feedback\+\_\+controller\+::\+INT\+\_\+\+ERR\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private Variable for the accumulated Integral Error. 
+
+Over time the integral of error is calculated and stored in this variable. This is computed by measuring the error and multiplying it by the time between measurements and scaling by Ki. \label{classfeedback__controller_a87fcfba6892213bf304e01eefc3aece7} 
+\index{feedback\_controller@{feedback\_controller}!KI@{KI}}
+\index{KI@{KI}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{KI}
+{\footnotesize\ttfamily int16\+\_\+t feedback\+\_\+controller\+::\+KI\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable corresponding to the integral control constant. 
+
+The Ki value scales the integral control accordingly. \label{classfeedback__controller_ad767d1a2c0448240343a8556f638f7df} 
+\index{feedback\_controller@{feedback\_controller}!KP@{KP}}
+\index{KP@{KP}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{KP}
+{\footnotesize\ttfamily int16\+\_\+t feedback\+\_\+controller\+::\+KP\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable corresponding to the proportional gain constant. 
+
+The Kp value scales the proportional gain accordingly. \label{classfeedback__controller_a2fc8fb203219f4c39e5477f3ab01afaf} 
+\index{feedback\_controller@{feedback\_controller}!SET\_POINT@{SET\_POINT}}
+\index{SET\_POINT@{SET\_POINT}!feedback\_controller@{feedback\_controller}}
+\doxysubsubsection{SET\_POINT}
+{\footnotesize\ttfamily int32\+\_\+t feedback\+\_\+controller\+::\+SET\+\_\+\+POINT\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable corresponding to the user defined set point. 
+
+The set point is the desired position of the encoder. It is set manually and initialized as 0. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+controller\+\_\+driver.\+h\end{DoxyCompactItemize}

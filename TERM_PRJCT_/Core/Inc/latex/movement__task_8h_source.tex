@@ -1,0 +1,99 @@
+\doxysection{movement\+\_\+task.\+h}
+\label{movement__task_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ movement\_task.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ Jun\ 13,\ 2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ andymccormick}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ INC\_MOVEMENT\_TASK\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ INC\_MOVEMENT\_TASK\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}stm32f4xx\_hal.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}BNO055.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}motor\_driver.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}controller\_driver.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}servo\_driver.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}encoder\_driver.h"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{class\ }movement\_task}
+\DoxyCodeLine{00028\ \{}
+\DoxyCodeLine{00029\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//*\ Creates\ a\ function\ for\ calling\ the\ specific\ state\ function}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}\ \ \ \ \textcolor{keyword}{typedef}\ void\ (movement\_task::*state\_fcn)(void);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00039\ \ \ \ \ uint32\_t\ state;\ \textcolor{comment}{//\ Current\ state}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00045\ \ \ \ \ uint32\_t\ runs;\ \textcolor{comment}{//\ Number\ of\ times\ Task\ Has\ Ran}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00051\ \ \ \ \ uint32\_t\ num\_states;\ \textcolor{comment}{//\ Number\ of\ states}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00057\ \ \ \ \ state\_fcn*\ state\_list;\ \textcolor{comment}{//\ Pointer\ to\ a\ List\ of\ States}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_0(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Initialize\ state}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_1(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Move\ Out\ of\ Home\ State}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_2(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Move\ Turn\ To\ move\ in\ Circle\ State}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_3(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Move\ in\ Circle\ State}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_4(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Return\ Home\ State}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00100\ \ \ \ \ motor\_driver\ Left\_Mot;}
+\DoxyCodeLine{00102\ \ \ \ \ motor\_driver\ Right\_Mot;}
+\DoxyCodeLine{00104\ \ \ \ \ encoder\_reader\ Left\_Encoder;}
+\DoxyCodeLine{00106\ \ \ \ \ encoder\_reader\ Right\_Encoder;}
+\DoxyCodeLine{00108\ \ \ \ \ feedback\_controller\ Left\_Feedback;}
+\DoxyCodeLine{00110\ \ \ \ \ feedback\_controller\ Right\_Feedback;}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00116\ \ \ \ \ UART\_HandleTypeDef\ *\ huart;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00119\ \ \ \ \ int32\_t\ right\_sp;}
+\DoxyCodeLine{00121\ \ \ \ \ int32\_t\ left\_sp;}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00124\ \ \ \ \ int16\_t\ right\_duty;}
+\DoxyCodeLine{00126\ \ \ \ \ int16\_t\ left\_duty;}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00129\ \ \ \ \ uint32\_t\ start\_ticks;}
+\DoxyCodeLine{00131\ \ \ \ \ uint32\_t\ curr\_time;}
+\DoxyCodeLine{00132\ \ \ \ \ uint16\_t\ start\_count;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00136\ \ \ \ \ movement\_task(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00143\ \ \ \ \ movement\_task(motor\_driver\ Left\_Mot,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ motor\_driver\ Right\_Mot,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ encoder\_reader\ Left\_Encoder,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ encoder\_reader\ Right\_Encoder,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ feedback\_controller\ Left\_Feedback,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ feedback\_controller\ Right\_Feedback,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ UART\_HandleTypeDef*\ huart);}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ run(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00162\ \ \ \ \ int32\_t\ get\_duty(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00163\ \};}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ INC\_MOVEMENT\_TASK\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

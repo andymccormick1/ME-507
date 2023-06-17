@@ -1,0 +1,242 @@
+\doxysection{movement\+\_\+task Class Reference}
+\label{classmovement__task}\index{movement\_task@{movement\_task}}
+
+
+Class for the robot movement task.  
+
+
+
+
+{\ttfamily \#include $<$movement\+\_\+task.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{classmovement__task_a3f01b2ad38979cd14b8869c8fe747070} 
+{\bfseries movement\+\_\+task} (void)
+\begin{DoxyCompactList}\small\item\em Prototype Default Constructor. \end{DoxyCompactList}\item 
+\textbf{ movement\+\_\+task} (\textbf{ motor\+\_\+driver} \textbf{ Left\+\_\+\+Mot}, \textbf{ motor\+\_\+driver} \textbf{ Right\+\_\+\+Mot}, \textbf{ encoder\+\_\+reader} \textbf{ Left\+\_\+\+Encoder}, \textbf{ encoder\+\_\+reader} \textbf{ Right\+\_\+\+Encoder}, \textbf{ feedback\+\_\+controller} \textbf{ Left\+\_\+\+Feedback}, \textbf{ feedback\+\_\+controller} \textbf{ Right\+\_\+\+Feedback}, UART\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ huart})
+\begin{DoxyCompactList}\small\item\em Initialization For all task constructors. \end{DoxyCompactList}\item 
+void \textbf{ run} (void)
+\begin{DoxyCompactList}\small\item\em Run method to implement the FSM. \end{DoxyCompactList}\item 
+int32\+\_\+t \textbf{ get\+\_\+duty} (void)
+\begin{DoxyCompactList}\small\item\em Function to get the current duty output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef void(movement\+\_\+task\+::$\ast$ \textbf{ state\+\_\+fcn}) (void)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \textbf{ state\+\_\+0} (void)
+\begin{DoxyCompactList}\small\item\em Initialization Task. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+1} (void)
+\begin{DoxyCompactList}\small\item\em State 1\+: Move out of Home. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+2} (void)
+\begin{DoxyCompactList}\small\item\em Satte 2\+: Rotate to begin circle. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+3} (void)
+\begin{DoxyCompactList}\small\item\em State 3\+: Move around in circle. \end{DoxyCompactList}\item 
+void \textbf{ state\+\_\+4} (void)
+\begin{DoxyCompactList}\small\item\em State 4\+: Return Home. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\label{classmovement__task_a6bbebe8f31d9c79c70bf59363a460e2a} 
+uint32\+\_\+t {\bfseries state}
+\begin{DoxyCompactList}\small\item\em Current State. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ runs}
+\begin{DoxyCompactList}\small\item\em Private Variable for number of times the task has ran. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ num\+\_\+states}
+\begin{DoxyCompactList}\small\item\em Pointer to a list of all states. \end{DoxyCompactList}\item 
+\textbf{ state\+\_\+fcn} $\ast$ \textbf{ state\+\_\+list}
+\begin{DoxyCompactList}\small\item\em Internal function for state 0. \end{DoxyCompactList}\item 
+\label{classmovement__task_a8790f392960d2d1738fb6c0f26708143} 
+\textbf{ motor\+\_\+driver} {\bfseries Left\+\_\+\+Mot}
+\begin{DoxyCompactList}\small\item\em Left rear motor object used for actuation. \end{DoxyCompactList}\item 
+\label{classmovement__task_a63c5f142220b3a1592e249a7bd169c39} 
+\textbf{ motor\+\_\+driver} {\bfseries Right\+\_\+\+Mot}
+\begin{DoxyCompactList}\small\item\em Right rear motor object used for actuation. \end{DoxyCompactList}\item 
+\label{classmovement__task_a99584813adf349b6ff4fe8e81ac70c28} 
+\textbf{ encoder\+\_\+reader} {\bfseries Left\+\_\+\+Encoder}
+\begin{DoxyCompactList}\small\item\em Left motor encoder object used to get current encoder values and control position. \end{DoxyCompactList}\item 
+\label{classmovement__task_affe09dfb539ede96af9e56c3c3b6eaac} 
+\textbf{ encoder\+\_\+reader} {\bfseries Right\+\_\+\+Encoder}
+\begin{DoxyCompactList}\small\item\em Right motor encoder object used to get current encoder values and control position. \end{DoxyCompactList}\item 
+\label{classmovement__task_a000c134886f2b7d52797796c02d16a46} 
+\textbf{ feedback\+\_\+controller} {\bfseries Left\+\_\+\+Feedback}
+\begin{DoxyCompactList}\small\item\em Feedback controller used to control position of the left motor. \end{DoxyCompactList}\item 
+\label{classmovement__task_a01bfea1b5968672b7505441fd0a259a6} 
+\textbf{ feedback\+\_\+controller} {\bfseries Right\+\_\+\+Feedback}
+\begin{DoxyCompactList}\small\item\em Feedback controller used to control position of the right motor. \end{DoxyCompactList}\item 
+UART\+\_\+\+Handle\+Type\+Def $\ast$ \textbf{ huart}
+\begin{DoxyCompactList}\small\item\em Pointer to a pre-\/initialized uart object. \end{DoxyCompactList}\item 
+\label{classmovement__task_a268866c303f9a64fe256acc25a5ad09f} 
+int32\+\_\+t {\bfseries right\+\_\+sp}
+\begin{DoxyCompactList}\small\item\em Right Motor set point for position control. \end{DoxyCompactList}\item 
+\label{classmovement__task_a47623b4e4fd9d50a0bd8f918501fa19a} 
+int32\+\_\+t {\bfseries left\+\_\+sp}
+\begin{DoxyCompactList}\small\item\em Left motor set point for position control. \end{DoxyCompactList}\item 
+\label{classmovement__task_a125b28b43864befa4a19f795f046452f} 
+int16\+\_\+t {\bfseries right\+\_\+duty}
+\begin{DoxyCompactList}\small\item\em Duty cycle for the right motor. \end{DoxyCompactList}\item 
+\label{classmovement__task_af9f194895872cf6a467a6b56ba0a399b} 
+int16\+\_\+t {\bfseries left\+\_\+duty}
+\begin{DoxyCompactList}\small\item\em Duty cycle for the left motor. \end{DoxyCompactList}\item 
+\label{classmovement__task_a6e2f6cb221a5aa14ecc2edbf62975e6d} 
+uint32\+\_\+t {\bfseries start\+\_\+ticks}
+\begin{DoxyCompactList}\small\item\em Private variable for the start time for each state. \end{DoxyCompactList}\item 
+\label{classmovement__task_a73f33a11eeafd005501777357c33ae3b} 
+uint32\+\_\+t {\bfseries curr\+\_\+time}
+\begin{DoxyCompactList}\small\item\em Private variable for the current time in the state. \end{DoxyCompactList}\item 
+\label{classmovement__task_ae19486296c8c4d85f9e605be3dfce4f3} 
+uint16\+\_\+t {\bfseries start\+\_\+count}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for the robot movement task. 
+
+The class below is used to implement a finite state machine for the movement of the robot about the game board. This consists of 5 states\+: an initialization state, state 1 move out of home box, state 2 rotate to begin circle, state 3 move in circles around the center of the board, state 4 return to home. This is implemented by switching between tasks when encoder values are reached and home position is reached. Each state uses logic to stop motor motion if the deadman\textquotesingle{}s switch is unpressed. 
+
+\doxysubsection{Member Typedef Documentation}
+\label{classmovement__task_a11da9703e226518b4c26bb77a4f2f50b} 
+\index{movement\_task@{movement\_task}!state\_fcn@{state\_fcn}}
+\index{state\_fcn@{state\_fcn}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_fcn}
+{\footnotesize\ttfamily typedef void(movement\+\_\+task\+::$\ast$ movement\+\_\+task\+::state\+\_\+fcn) (void)\hspace{0.3cm}{\ttfamily [private]}}
+
+This function is used to call the required state function. It works by taking in the current state and calling the specific function corresponding to that state. The list of states and corresponding functions is kept in a struct that the function accesses. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{classmovement__task_a9c6e5b83a093abc2a70c1c99a4473d01} 
+\index{movement\_task@{movement\_task}!movement\_task@{movement\_task}}
+\index{movement\_task@{movement\_task}!movement\_task@{movement\_task}}
+\doxysubsubsection{movement\_task()}
+{\footnotesize\ttfamily movement\+\_\+task\+::movement\+\_\+task (\begin{DoxyParamCaption}\item[{\textbf{ motor\+\_\+driver}}]{Left\+\_\+\+Mot,  }\item[{\textbf{ motor\+\_\+driver}}]{Right\+\_\+\+Mot,  }\item[{\textbf{ encoder\+\_\+reader}}]{Left\+\_\+\+Encoder,  }\item[{\textbf{ encoder\+\_\+reader}}]{Right\+\_\+\+Encoder,  }\item[{\textbf{ feedback\+\_\+controller}}]{Left\+\_\+\+Feedback,  }\item[{\textbf{ feedback\+\_\+controller}}]{Right\+\_\+\+Feedback,  }\item[{UART\+\_\+\+Handle\+Type\+Def $\ast$}]{huart }\end{DoxyParamCaption})}
+
+
+
+Initialization For all task constructors. 
+
+All the input arguments require pre-\/constructed and pre-\/configured. The uart pointer required is included purely for debugging purposes. 
+
+\doxysubsection{Member Function Documentation}
+\label{classmovement__task_a4b6f51c515a825fc94e0a71cdff1646b} 
+\index{movement\_task@{movement\_task}!get\_duty@{get\_duty}}
+\index{get\_duty@{get\_duty}!movement\_task@{movement\_task}}
+\doxysubsubsection{get\_duty()}
+{\footnotesize\ttfamily int32\+\_\+t movement\+\_\+task\+::get\+\_\+duty (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to get the current duty output. 
+
+This function is used to verify the pwm output before implementing it with the servo motor. \label{classmovement__task_a7090b9325f85bdd9a79185616fe2ab86} 
+\index{movement\_task@{movement\_task}!run@{run}}
+\index{run@{run}!movement\_task@{movement\_task}}
+\doxysubsubsection{run()}
+{\footnotesize\ttfamily void movement\+\_\+task\+::run (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Run method to implement the FSM. 
+
+The run method uses the state variable to call the respective function using the state\+\_\+fcn function. \label{classmovement__task_a84cd0d238f628f201020f9cabe254065} 
+\index{movement\_task@{movement\_task}!state\_0@{state\_0}}
+\index{state\_0@{state\_0}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_0()}
+{\footnotesize\ttfamily void movement\+\_\+task\+::state\+\_\+0 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Initialization Task. 
+
+This state always transitions to state 1 and sets all private variable values to zero. \label{classmovement__task_af31531705744cc087e398a2cd3108b53} 
+\index{movement\_task@{movement\_task}!state\_1@{state\_1}}
+\index{state\_1@{state\_1}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_1()}
+{\footnotesize\ttfamily void movement\+\_\+task\+::state\+\_\+1 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+State 1\+: Move out of Home. 
+
+In this state the robot moves both wheels a specific amount of encoder ticks. The amount of encoder ticks corresponds to a distance where the robot is fully out of the home bounding box which was determined by testing. The movment is accomplished by using the motor driver objects set PWM function, the encoder get count method, and the feedback controller control function. \label{classmovement__task_af5b4d926c7862bb6cd5b60099cc28e6b} 
+\index{movement\_task@{movement\_task}!state\_2@{state\_2}}
+\index{state\_2@{state\_2}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_2()}
+{\footnotesize\ttfamily void movement\+\_\+task\+::state\+\_\+2 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Satte 2\+: Rotate to begin circle. 
+
+In this state the robot moves both wheels a specific amount of encoder ticks. The amount of encoder ticks corresponds to turning the robot to be tangent to the circle The movment is accomplished by using the motor driver objects set PWM function, the encoder get count method, and the feedback controller control function. \label{classmovement__task_aecc7cb72f6565f904e8fdba650fb4e62} 
+\index{movement\_task@{movement\_task}!state\_3@{state\_3}}
+\index{state\_3@{state\_3}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_3()}
+{\footnotesize\ttfamily void movement\+\_\+task\+::state\+\_\+3 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+State 3\+: Move around in circle. 
+
+In this state the robot moves around the game board in circles. The movement is accomplished by setting the left motor duty cycle to double that of the right motor. The difference in motor speeds results in the robot moving in a circular path. The movement is accomplished by using the motor set pwm function. \label{classmovement__task_adaaf50a6ec344c6a023fa78bc45cb6d6} 
+\index{movement\_task@{movement\_task}!state\_4@{state\_4}}
+\index{state\_4@{state\_4}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_4()}
+{\footnotesize\ttfamily void movement\+\_\+task\+::state\+\_\+4 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+State 4\+: Return Home. 
+
+This function is accomplished by using the imu heading and integrated current position. This state has not been fully implemented yet. It will likely require an additional state or task dedicated to determining the robot\textquotesingle{}s position in the arena using the IMU heading and the encoder position. 
+
+\doxysubsection{Member Data Documentation}
+\label{classmovement__task_a54f01985e936321f83a509e73e76a063} 
+\index{movement\_task@{movement\_task}!huart@{huart}}
+\index{huart@{huart}!movement\_task@{movement\_task}}
+\doxysubsubsection{huart}
+{\footnotesize\ttfamily UART\+\_\+\+Handle\+Type\+Def$\ast$ movement\+\_\+task\+::huart\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to a pre-\/initialized uart object. 
+
+Used for debugging \label{classmovement__task_a5665d1bdc41e24b4d64e0df3c371ebe2} 
+\index{movement\_task@{movement\_task}!num\_states@{num\_states}}
+\index{num\_states@{num\_states}!movement\_task@{movement\_task}}
+\doxysubsubsection{num\_states}
+{\footnotesize\ttfamily uint32\+\_\+t movement\+\_\+task\+::num\+\_\+states\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to a list of all states. 
+
+This is used in the state\+\_\+fcn function to list the states and the corresponding function \label{classmovement__task_a4e6780efc2ebed6fc3a96315d2d76cbc} 
+\index{movement\_task@{movement\_task}!runs@{runs}}
+\index{runs@{runs}!movement\_task@{movement\_task}}
+\doxysubsubsection{runs}
+{\footnotesize\ttfamily uint32\+\_\+t movement\+\_\+task\+::runs\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private Variable for number of times the task has ran. 
+
+This variable is incremented every time the task is ran. \label{classmovement__task_a70dcf006789a7dadd757a2b2f459d6ee} 
+\index{movement\_task@{movement\_task}!state\_list@{state\_list}}
+\index{state\_list@{state\_list}!movement\_task@{movement\_task}}
+\doxysubsubsection{state\_list}
+{\footnotesize\ttfamily \textbf{ state\+\_\+fcn}$\ast$ movement\+\_\+task\+::state\+\_\+list\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Internal function for state 0. 
+
+Initialization state. In this state the I2C bus is initialized and set up for communication with the RGB color sensor. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+movement\+\_\+task.\+h\end{DoxyCompactItemize}

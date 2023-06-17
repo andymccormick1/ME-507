@@ -22,6 +22,10 @@
 #include "BNO055.h"
 #include "movement_task.h"
 #include "sorting_task.h"
+#include "motor_driver.h"
+#include "controller_driver.h"
+#include "servo_driver.h"
+#include "encoder_driver.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -208,7 +212,7 @@ int main(void)
     /* USER CODE END WHILE */
 
 	  	task1.run();
-	  	//  task2.run();
+	  	task2.run();
 
 
 /*

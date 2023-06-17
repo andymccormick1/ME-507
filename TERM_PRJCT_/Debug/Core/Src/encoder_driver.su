@@ -1,0 +1,4 @@
+../Core/Src/encoder_driver.cpp:16:1:encoder_reader::encoder_reader()	16	static
+../Core/Src/encoder_driver.cpp:22:1:encoder_reader::encoder_reader(TIM_HandleTypeDef*)	16	static
+../Core/Src/encoder_driver.cpp:36:6:void encoder_reader::zero_count()	16	static
+../Core/Src/encoder_driver.cpp:44:9:int32_t encoder_reader::get_count()	16	static

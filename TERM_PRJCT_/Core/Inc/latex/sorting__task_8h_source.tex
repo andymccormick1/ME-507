@@ -1,0 +1,96 @@
+\doxysection{sorting\+\_\+task.\+h}
+\label{sorting__task_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ sorting\_task/h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ Jun\ 13,\ 2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ caleb\ erlenborn}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ sorting\_task\_TASK\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ sorting\_task\_TASK\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}stm32f4xx\_hal.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}BNO055.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}motor\_driver.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}controller\_driver.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}servo\_driver.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}encoder\_driver.h"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ rgb\_addr\ \ \ \ \ \ 0x29<<1}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ clrdata\_addr\ 0x94}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ enable\_addr\ \ \ 0x80}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ status\_addr\ \ \ 0x93}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ timing\_addr\ \ \ 0x81}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ wait\_addr\ \ \ \ \ 0x82}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ clr\_addr\ \ \ \ \ \ 0x94}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ red\_addr\ \ \ \ \ \ 0x96}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ green\_addr\ \ \ \ 0x98}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ blue\_addr\ \ \ \ \ 0x98}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{class\ }sort\_task}
+\DoxyCodeLine{00039\ \{}
+\DoxyCodeLine{00040\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{//*\ Creates\ a\ function\ for\ calling\ the\ specific\ state\ function}}
+\DoxyCodeLine{00047\ \textcolor{comment}{}\ \ \ \ \textcolor{keyword}{typedef}\ void\ (sort\_task::*state\_fcn)(void);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00050\ \ \ \ \ uint32\_t\ state;\ \textcolor{comment}{//\ Current\ state}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00056\ \ \ \ \ uint32\_t\ runs;\ \textcolor{comment}{//\ Number\ of\ times\ Task\ Has\ Ran}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00062\ \ \ \ \ uint32\_t\ num\_states;\ \textcolor{comment}{//\ Number\ of\ states}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00068\ \ \ \ \ state\_fcn*\ state\_list;\ \textcolor{comment}{//\ Pointer\ to\ a\ List\ of\ States}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_0(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Initialize\ state}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_1(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Wait\ for\ color\ state}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_2(\textcolor{keywordtype}{void});\ \textcolor{comment}{//\ Set\ change\ servo\ to\ accept}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ state\_3(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00102\ \ \ \ \ servo\_driver\ servo;}
+\DoxyCodeLine{00104\ \ \ \ \ UART\_HandleTypeDef\ *\ huart;}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00107\ \ \ \ \ int16\_t\ servo\_angle;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00110\ \ \ \ \ uint32\_t\ start\_ticks;}
+\DoxyCodeLine{00112\ \ \ \ \ uint32\_t\ curr\_time;}
+\DoxyCodeLine{00113\ \ \ \ \ uint16\_t\ start\_count;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00116\ \ \ \ \ I2C\_HandleTypeDef*\ hi2c;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00119\ \ \ \ \ uint16\_t\ red\_val,green\_val,blue\_val;}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00123\ \ \ \ \ sort\_task(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00129\ \ \ \ \ sort\_task(servo\_driver\ servo,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ UART\_HandleTypeDef*\ huart,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ I2C\_HandleTypeDef*\ hi2c);}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ run(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00143\ \ \ \ \ int32\_t\ get\_duty(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00144\ \};}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ sorting\_task\_TASK\_H\_\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

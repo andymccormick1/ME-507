@@ -1,0 +1,123 @@
+\doxysection{encoder\+\_\+reader Class Reference}
+\label{classencoder__reader}\index{encoder\_reader@{encoder\_reader}}
+
+
+Encoder Reader class used to read and return current encoder position.  
+
+
+
+
+{\ttfamily \#include $<$encoder\+\_\+driver.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{classencoder__reader_aeadf2cc411774d749f9b6129016e8dd4} 
+{\bfseries encoder\+\_\+reader} (void)
+\begin{DoxyCompactList}\small\item\em Default constructor prototype. \end{DoxyCompactList}\item 
+\textbf{ encoder\+\_\+reader} (TIM\+\_\+\+Handle\+Type\+Def $\ast$\textbf{ htim})
+\begin{DoxyCompactList}\small\item\em Constructor for encoder objects. \end{DoxyCompactList}\item 
+void \textbf{ zero\+\_\+count} (void)
+\begin{DoxyCompactList}\small\item\em Function to zero the current motor position. \end{DoxyCompactList}\item 
+int32\+\_\+t \textbf{ get\+\_\+count} (void)
+\begin{DoxyCompactList}\small\item\em Function to get the current count value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int32\+\_\+t \textbf{ COUNT}
+\begin{DoxyCompactList}\small\item\em Private Variable containing the current encoder value. \end{DoxyCompactList}\item 
+uint32\+\_\+t \textbf{ prev\+\_\+value}
+\begin{DoxyCompactList}\small\item\em Private Variable for the previous encoder value. \end{DoxyCompactList}\item 
+int32\+\_\+t \textbf{ DELTA}
+\begin{DoxyCompactList}\small\item\em Private variable for the difference between the current and previous encoder value. \end{DoxyCompactList}\item 
+TIM\+\_\+\+Handle\+Type\+Def $\ast$ \textbf{ htim}
+\begin{DoxyCompactList}\small\item\em Pointer to a pre-\/configured timer object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Encoder Reader class used to read and return current encoder position. 
+
+The encoder class is used to read the current encoder value of a motor encoder. This requires a pre-\/initialized timer configured to encoder mode. The encoder simply works by reading the current encoder value and finding the difference between this value and the previous value. The difference is then added to the current count which contains the position of the motor. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\label{classencoder__reader_abb882c2fca94a0526e521e0c203d4391} 
+\index{encoder\_reader@{encoder\_reader}!encoder\_reader@{encoder\_reader}}
+\index{encoder\_reader@{encoder\_reader}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{encoder\_reader()}
+{\footnotesize\ttfamily encoder\+\_\+reader\+::encoder\+\_\+reader (\begin{DoxyParamCaption}\item[{TIM\+\_\+\+Handle\+Type\+Def $\ast$}]{htim }\end{DoxyParamCaption})}
+
+
+
+Constructor for encoder objects. 
+
+The encoder object simply needs pointer to a timer to be initialized. 
+
+\doxysubsection{Member Function Documentation}
+\label{classencoder__reader_a489abe87a8c432c82e821daf3f7c55d2} 
+\index{encoder\_reader@{encoder\_reader}!get\_count@{get\_count}}
+\index{get\_count@{get\_count}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{get\_count()}
+{\footnotesize\ttfamily int32\+\_\+t encoder\+\_\+reader\+::get\+\_\+count (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to get the current count value. 
+
+This function simply returns the value stored in the COUNT variable. Before returning the value, the COUNT is upodated. This is done by getting the timer (encoders) current value and subtracting the previous value. This value is then added to the COUNT value which is then returned. \label{classencoder__reader_ae1080f731fac1e481cfde7c78a3c47e5} 
+\index{encoder\_reader@{encoder\_reader}!zero\_count@{zero\_count}}
+\index{zero\_count@{zero\_count}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{zero\_count()}
+{\footnotesize\ttfamily void encoder\+\_\+reader\+::zero\+\_\+count (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to zero the current motor position. 
+
+This function sets the COUNT variable to zero. This can be done to set a home position or use a current position as a datum. 
+
+\doxysubsection{Member Data Documentation}
+\label{classencoder__reader_a346890b4bf86993f0a757b019b92eee8} 
+\index{encoder\_reader@{encoder\_reader}!COUNT@{COUNT}}
+\index{COUNT@{COUNT}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{COUNT}
+{\footnotesize\ttfamily int32\+\_\+t encoder\+\_\+reader\+::\+COUNT\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private Variable containing the current encoder value. 
+
+This value is constantly updated by the difference in encoder ticks. \label{classencoder__reader_a79d43744e5cc6762dc032c963e3f6622} 
+\index{encoder\_reader@{encoder\_reader}!DELTA@{DELTA}}
+\index{DELTA@{DELTA}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{DELTA}
+{\footnotesize\ttfamily int32\+\_\+t encoder\+\_\+reader\+::\+DELTA\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private variable for the difference between the current and previous encoder value. 
+
+This value is obtained by subtracting the previous value from the current value. DELTA is then added to the count to update the current position of the motor. \label{classencoder__reader_a3a14c90a84914b45745af8a1e369db6d} 
+\index{encoder\_reader@{encoder\_reader}!htim@{htim}}
+\index{htim@{htim}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{htim}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def$\ast$ encoder\+\_\+reader\+::htim\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to a pre-\/configured timer object. 
+
+The timer should be initialized before the encoder object is created and should be configured in encoder mode. The timer does the bulk of the heavy lifting by keeping track of the encoder pulses coming voer the channel. The timer can then be \"{}read\"{} to obtain the current value. \label{classencoder__reader_ad9ef6bf9191c78c8dd7cb0fecdddd038} 
+\index{encoder\_reader@{encoder\_reader}!prev\_value@{prev\_value}}
+\index{prev\_value@{prev\_value}!encoder\_reader@{encoder\_reader}}
+\doxysubsubsection{prev\_value}
+{\footnotesize\ttfamily uint32\+\_\+t encoder\+\_\+reader\+::prev\+\_\+value\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private Variable for the previous encoder value. 
+
+This value is compared to the current value to get how far the encoder has moved between measurements 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+encoder\+\_\+driver.\+h\end{DoxyCompactItemize}

@@ -31,7 +31,10 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/motor_driver.h ../Core/Inc/BNO055.h \
  ../Core/Inc/movement_task.h ../Core/Inc/BNO055.h \
- ../Core/Inc/motor_driver.h ../Core/Inc/sorting_task.h
+ ../Core/Inc/motor_driver.h ../Core/Inc/controller_driver.h \
+ ../Core/Inc/servo_driver.h ../Core/Inc/encoder_driver.h \
+ ../Core/Inc/sorting_task.h ../Core/Inc/controller_driver.h \
+ ../Core/Inc/servo_driver.h ../Core/Inc/encoder_driver.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -68,4 +71,10 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Core/Inc/movement_task.h:
 ../Core/Inc/BNO055.h:
 ../Core/Inc/motor_driver.h:
+../Core/Inc/controller_driver.h:
+../Core/Inc/servo_driver.h:
+../Core/Inc/encoder_driver.h:
 ../Core/Inc/sorting_task.h:
+../Core/Inc/controller_driver.h:
+../Core/Inc/servo_driver.h:
+../Core/Inc/encoder_driver.h:
