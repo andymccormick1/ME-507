@@ -156,52 +156,6 @@ int main(void)
 
            movement_task task1 = movement_task(MOTOR_1, MOTOR_2, ENCD1, ENCD2, controller_1, controller_2, &huart1);
            sort_task	task2 = sort_task(SERVO1, &huart1,&hi2c1);
-// I2C Testing:
-
-#define imuaddr             0x28<<1
-#define oprmode_addr        0x3D
-#define heading_addr        0x1E
-#define heading_addr_msb    0x1F
-#define calib_addr          0x35
-#define pwrmode_addr        0x3E
-#define unit_select_addr    0x3B
-
-
-
-
-
-
-    uint8_t config_mode = 0x00;
-    uint8_t imu_mode = 0b00001000;
-    uint8_t cur_opmode[1] = {0};
-
-    uint8_t calib_state[1] = {0};
-
-    uint8_t cur_pwrmode[1] = {0};
-
-    uint8_t unit_sel = 0b00010001;
-
-	uint8_t raw_heading[2] = {0};
-	uint8_t raw_heading1[2] = {0};
-	uint8_t raw_heading2[2] = {0};
-	uint8_t raw_heading3[2] = {0};
-	uint16_t heading, heading1, heading2, heading3;
-	uint8_t heading_deg;
-	uint8_t raw_headinglsb[1], raw_headingmsb[1];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   /* USER CODE END 2 */
 
@@ -213,29 +167,6 @@ int main(void)
 
 	  	task1.run();
 	  	task2.run();
-
-
-/*
-	  	  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
-	  	  {
-
-	  		  FLYWHEEL.Set_PWM(duty_cycle_flywheel);
-	  					  // State where the remote button is not pressed
-	  		char buffer[50] = {0};
-	  		int32_t a1 = sprintf(buffer, "Button Pressed \r\n");
-	  		HAL_UART_Transmit(huart,(uint8_t*) buffer, a1, 1000);
-	  	  } else
-	  	  {
-	  		char buffer[50] = {0};
-	  		int32_t a2 = sprintf(buffer, "Button Not Pressed \r\n");
-	  		HAL_UART_Transmit(huart,(uint8_t*) buffer, a2, 1000);
-	  	  	FLYWHEEL.Set_PWM(0);
-	  	  }
-	  	  */
-
-
-
-
 
 
     /* USER CODE BEGIN 3 */
